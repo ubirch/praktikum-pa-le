@@ -1,0 +1,50 @@
+  <form class="form-horizontal" [formGroup]="form">
+
+    <div class="form-group">
+      <label for="fName">First Name</label>
+      <input type="text" id="fName" class="form-control" formControlName="fName" required>
+    </div>
+
+    <div class="form-group">
+      <label for="gName" class="control-label">Last Name</label>
+      <input type="text" id="gName" class="form-control" formControlName="gName" required>
+    </div>
+
+    <div class="form-group">
+      <label for="birthDate" class="control-label">Birth Date</label>
+      <input type="date" id="birthDate" class="form-control" formControlName="birthDate">
+    </div>
+
+    <div class="form-group">
+      <label for="idNumber" class="control-label">Passport or other id number</label>
+      <input type="number" id="idNumber" class="form-control" formControlName="idNumber" required>
+    </div>
+
+    <div class="form-group">
+      <label for="labId">Lab ID</label>
+      <input type="text" id="labId" class="form-control" formControlName="labId" required>
+    </div>
+
+    <div class="form-group">
+      <label for="testDateTime" class="control-label">Test date and time</label>
+      <input type="datetime-local" id="testDateTime" class="form-control" formControlName="testDateTime" required>
+    </div>
+
+    <div class="form-group">
+      <label for="testType" class="control-label">Test Type</label>
+      <input type="text" id="testType" class="form-control" formControlName="testType" required>
+    </div>
+
+    <div class="form-group">
+      <label for="testResult" class="control-label">Test Result</label>
+      <input type="text" id="testResult" class="form-control" formControlName="testResult" required>
+    </div>
+
+    <div class="form-group">
+      <label for="ranNum" class="control-label">Random Number</label>
+      <input type="text" id="ranNum" class="form-control" formControlName="ranNum" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="!form.valid">verify</button>
+  </form>
+
