@@ -1,0 +1,5 @@
+<button class="btn btn-primary" (click)="onDetailClick()">Display Details</button>
+<p *ngIf="!detailHidden">Das sind die Details</p>
+<p *ngFor="let click of clicks; let i = index" [ngStyle]="{backgroundColor: i >= 4 ? 'blue' : 'transparent'}"
+   [ngClass]="{styled: i >= 4}" >{{click}}</p>
+
