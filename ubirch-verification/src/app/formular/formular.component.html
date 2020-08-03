@@ -1,52 +1,76 @@
 <div class="container">
     <div>
-      <form  [formGroup]="form">
+      <form [formGroup]="form">
+
         <div class="form-group">
-          <label for="fName">First Name</label>
-          <input type="text" id="fName" class="form-control" formControlName="fName" required>
+          <label for="gName">First Name</label>
+          <input [ngClass]="{validEntry: gName.valid, invalidEntry: gName.invalid}"
+                 type="text" id="gName" class="form-control"
+                 formControlName="gName" required>
         </div>
 
         <div class="form-group">
-          <label for="gName" class="control-label">Last Name</label>
-          <input type="text" id="gName" class="form-control" formControlName="gName" required>
+          <label for="fName">Last Name</label>
+          <input [ngClass]="{validEntry: fName.valid, invalidEntry: fName.invalid}"
+                 type="text" id="fName" class="form-control"
+                 formControlName="fName" required>
         </div>
 
         <div class="form-group">
-          <label for="birthDate" class="control-label">Birth Date</label>
-          <input type="date" id="birthDate" class="form-control" formControlName="birthDate">
+          <label for="birthDate">Birth Date</label>
+          <input [ngClass]="{validEntry: birthDate.valid, invalidEntry: birthDate.invalid}"
+                 type="date" id="birthDate" class="form-control"
+                 formControlName="birthDate">
         </div>
 
         <div class="form-group">
-          <label for="idNumber" class="">Passport/Id Number</label>
-          <input type="text" id="idNumber" class="form-control" formControlName="idNumber" required>
+          <label for="idNumber">Passport/Id Number</label>
+          <input [ngClass]="{validEntry: idNumber.valid, invalidEntry: idNumber.invalid}"
+                 type="text" id="idNumber" class="form-control"
+                 formControlName="idNumber" required>
         </div>
 
         <div class="form-group">
-          <label for="labId" class="control-label">Lab ID</label>
-          <input type="text" id="labId" class="form-control" formControlName="labId" required>
+          <label for="labId">Lab ID</label>
+          <input [ngClass]="{validEntry: labId.valid, invalidEntry: labId.invalid}"
+                 type="text" id="labId" class="form-control"
+                 formControlName="labId" required>
         </div>
 
         <div class="form-group">
-          <label for="testDateTime" class="control-label">Test date and time</label>
-          <input type="datetime-local" id="testDateTime" class="form-control" formControlName="testDateTime" required>
+          <label for="testDateTime">Test date and time</label>
+          <input [ngClass]="{validEntry: testDateTime.valid, invalidEntry: testDateTime.invalid}"
+                 type="datetime-local" id="testDateTime" class="form-control"
+                 formControlName="testDateTime" required>
         </div>
 
         <div class="form-group">
-          <label for="testType" class="control-label">Test Type</label>
-          <input type="text" id="testType" class="form-control" formControlName="testType" required>
+          <label for="testType">Test Type</label>
+          <input [ngClass]="{validEntry: testType.valid, invalidEntry: testType.invalid}"
+                 type="text" id="testType" class="form-control"
+                 formControlName="testType" required>
         </div>
 
         <div class="form-group">
-          <label for="testResult" class="control-label">Test Result</label>
-          <input type="text" id="testResult" class="form-control" formControlName="testResult" required>
+          <label for="testResult">Test Result</label>
+          <input [ngClass]="{validEntry: testResult.valid, invalidEntry: testResult.invalid}"
+                 type="text" placeholder="x/n/p" id="testResult" class="form-control"
+                 formControlName="testResult" required>
         </div>
 
         <div class="form-group">
-          <label for="ranNum" class="control-label">Random Number</label>
-          <input type="text" id="ranNum" class="form-control" formControlName="ranNum" required>
+          <label for="ranNum">Random Number</label>
+          <input [ngClass]="{validEntry: ranNum.valid, invalidEntry: ranNum.invalid}"
+                 type="text" id="ranNum" class="form-control"
+                 formControlName="ranNum" required>
         </div>
 
-        <button type="submit" class="btn btn-primary" [disabled]="!form.valid">verify</button>
+        <button type="submit" class="btn btn-primary"
+                [disabled]="!form.valid"
+                (click)="createJson()">verify</button>
+
+        <label>{{formData}}</label>
+
       </form>
     </div>
 </div>

@@ -1,0 +1,7 @@
+.validEntry{
+  border: 1px solid green;
+}
+
+.invalidEntry{
+  border: 1px solid red;
+}
