@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-formular',
@@ -49,5 +50,7 @@ export class FormularComponent implements OnInit {
       s: this.ranNum.value,
       t: this.testType.value,
     });
+   console.log(this.testDateTime);
+   console.log(filter(this.testDateTime.value));
   }
 }
