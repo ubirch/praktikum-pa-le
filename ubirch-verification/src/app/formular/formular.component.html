@@ -20,7 +20,7 @@
           <label for="birthDate">Birth Date</label>
           <input [ngClass]="{validEntry: birthDate.valid, invalidEntry: birthDate.invalid}"
                  type="number" id="birthDate" class="form-control"
-                 formControlName="b">
+                 formControlName="b" placeholder="yyyymmdd">
         </div>
 
         <div class="form-group">
@@ -41,7 +41,7 @@
           <label for="testDateTime">Test date and time</label>
           <input [ngClass]="{validEntry: testDateTime.valid, invalidEntry: testDateTime.invalid}"
                  type="number" id="testDateTime" class="form-control"
-                 formControlName="d" required>
+                 formControlName="d" required placeholder="yyyymmddtttt">
         </div>
 
         <div class="form-group">
@@ -68,7 +68,7 @@
         <button type="submit" class="btn btn-primary"
                 [disabled]="!form.valid"
                 (click)="verifyClick()">verify</button>
-        <label>{{formData}}</label>
+        <label></label>
       </form>
     </div>
 </div>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { sha256 } from 'js-sha256/src/sha256.js';
-import { HttpClient } from '@angular/common/http';
+import { sha512} from 'js-sha512';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
@@ -9,6 +10,8 @@ import { catchError, retry } from 'rxjs/operators';
 })
 export class VerificationService {
 
+  verificationApiUrl = 'https://verify.prod.ubirch.com/api/upp/verify/anchor?blockchain_info=ext';
+  verificationStatus = 0;
   constructor(private http: HttpClient) { }
 
   verify(fData): void {
@@ -20,7 +23,7 @@ export class VerificationService {
   createJson(formData): string {
      console.log(formData);
      const json = JSON.stringify(formData);
-     console.log(json);
+     console.log('json:' + json);
      return json;
   }
 
@@ -28,15 +31,51 @@ export class VerificationService {
     let transIdAB: ArrayBuffer;
     transIdAB = sha256.arrayBuffer(json);
     const transId: string = btoa(new Uint8Array(transIdAB).reduce((data, byte) => data + String.fromCharCode(byte), ''));
-    console.log('jsonhash: ' + transId);
+    console.log('hash: ' + transId);
     return transId;
   }
 
-  verifyHash(hash){
-    this.sendverificationRequest(hash);
+  verifyHash(hash): void{
+    this.sendVerificationRequest(hash);
   }
 
-  sendverificationRequest(hash: string): void {
+  sendVerificationRequest(hash: string): void {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'text/plain'
+      }),
+    };
+    this.http.post(this.verificationApiUrl, hash, {observe: 'response'})
+      .pipe(catchError(this.handleError))
+      .subscribe(response => {
+        console.log(response.body);
+        this.handleResponse(response.body, hash);
+      });
 
   }
+
+  handleError(error: HttpErrorResponse){
+   if (error.status === 404){
+     return throwError(
+       'Zertifikat konnte nicht gefunden werden.'
+     );
+   }else {
+     return throwError(
+       'Ein unbekannter Fehler ist aufgetreten; server response code:' + error.status);
+   }
+
+  }
+
+  handleResponse(response: object, hash: string){
+    let seal = Object.entries(response)[0];
+    seal = seal[1];
+    console.log(seal);
+
+    if (!seal || !seal.length){
+      this.verificationStatus = 1;
+    }
+
+  }
+
+
 }
