@@ -25,10 +25,9 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dfcba95e-d109-4933-ad35-88c69d75fa37" name="Default Changelist" comment="JSON and hash creation">
+    <list default="true" id="dfcba95e-d109-4933-ad35-88c69d75fa37" name="Default Changelist" comment="HTTP requests and error handling;incomplete">
+      <change afterPath="$PROJECT_DIR$/ubirch-verification/src/app/models.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ubirch-verification/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/ubirch-verification/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ubirch-verification/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/ubirch-verification/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ubirch-verification/src/app/verification.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ubirch-verification/src/app/verification.service.ts" afterDir="false" />
@@ -76,7 +75,8 @@
       <workItem from="1596179828413" duration="69000" />
       <workItem from="1596200481131" duration="614000" />
       <workItem from="1596203687684" duration="49427000" />
-      <workItem from="1596718827435" duration="13439000" />
+      <workItem from="1596718827435" duration="13580000" />
+      <workItem from="1597050629299" duration="8786000" />
     </task>
     <task id="LOCAL-00001" summary="angular project init">
       <created>1596201079025</created>
@@ -120,7 +120,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596631015975</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="HTTP requests and error handling;incomplete">
+      <created>1596732397374</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1596732397374</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,7 +164,8 @@
     <MESSAGE value="form validation with feedback and JSON generation" />
     <MESSAGE value="verification service init" />
     <MESSAGE value="JSON and hash creation" />
-    <option name="LAST_COMMIT_MESSAGE" value="JSON and hash creation" />
+    <MESSAGE value="HTTP requests and error handling;incomplete" />
+    <option name="LAST_COMMIT_MESSAGE" value="HTTP requests and error handling;incomplete" />
   </component>
   <component name="WindowStateProjectService">
     <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1596201093992">
@@ -172,10 +180,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1596557676695" />
-    <state x="202" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1596728277768">
+    <state x="202" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597060325716">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="202" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1596728277768" />
+    <state x="202" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1597060325716" />
     <state x="425" y="186" key="run.anything.popup" timestamp="1596561781054">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

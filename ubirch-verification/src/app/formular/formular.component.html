@@ -68,8 +68,9 @@
         <button type="submit" class="btn btn-primary"
                 [disabled]="!form.valid"
                 (click)="verifyClick()">verify</button>
-        <label></label>
+        <button type="button" class="btn btn-primary" (click)="getVerificationStatus()"></button>
       </form>
+      <label></label>
     </div>
 </div>
 

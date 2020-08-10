@@ -4,6 +4,7 @@ import { sha512} from 'js-sha512';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import {IUbirchResponse} from './models';
 
 @Injectable({
   providedIn: 'root',
@@ -11,13 +12,24 @@ import { catchError, retry } from 'rxjs/operators';
 export class VerificationService {
 
   verificationApiUrl = 'https://verify.prod.ubirch.com/api/upp/verify/anchor?blockchain_info=ext';
-  verificationStatus = 0;
+  verificationStatus: any;
+
   constructor(private http: HttpClient) { }
 
   verify(fData): void {
     const json = this.createJson(fData);
     const hash = this.createHash(json);
-    this.verifyHash(hash);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'text/plain'
+      }),
+    };
+    this.http.post(this.verificationApiUrl, hash, {observe: 'response'})
+      .pipe(catchError(this.handleError))
+      .subscribe(response => {
+        console.log(response.body);
+        this.checkResponse(response.body, hash);
+      });
   }
 
   createJson(formData): string {
@@ -35,46 +47,61 @@ export class VerificationService {
     return transId;
   }
 
-  verifyHash(hash): void{
-    this.sendVerificationRequest(hash);
-  }
+
 
   sendVerificationRequest(hash: string): void {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'text/plain'
-      }),
-    };
-    this.http.post(this.verificationApiUrl, hash, {observe: 'response'})
-      .pipe(catchError(this.handleError))
-      .subscribe(response => {
-        console.log(response.body);
-        this.handleResponse(response.body, hash);
-      });
+
 
   }
 
   handleError(error: HttpErrorResponse){
    if (error.status === 404){
+     this.verificationStatus = {type: error, code: 1};
      return throwError(
-       'Zertifikat konnte nicht gefunden werden.'
+       this.verificationStatus = {type: error, code: 1}
      );
    }else {
+     this.verificationStatus = {type: error, code: 4};
      return throwError(
        'Ein unbekannter Fehler ist aufgetreten; server response code:' + error.status);
    }
 
   }
 
-  handleResponse(response: object, hash: string){
-    let seal = Object.entries(response)[0];
-    seal = seal[1];
+  checkResponse(response: object, hash: string){
+    if (!response){
+      // error 'Verification failed empty response'
+      this.verificationStatus = {type: 'error', code: 3};
+    }
+
+    const responseObj: IUbirchResponse = response;
+
+    if (!responseObj){
+      // error 'Verification failed empty response'
+      this.verificationStatus = {type: 'error', code: 3};
+    }
+
+    const seal = responseObj.upp;
     console.log(seal);
 
     if (!seal || !seal.length){
-      this.verificationStatus = 1;
+      // error 'Verification failed missing seal in response'
+      this.verificationStatus = {type: 'error', code: 2};
     }
 
+    // verification successful
+    console.log('verification successful');
+    this.verificationStatus = {type: 'info', code: 2};
+
+    const blockchainTX = responseObj.anchors;
+    console.log(blockchainTX);
+
+    if (!blockchainTX || !blockchainTX.length){
+      // error 'no anchors'
+      this.verificationStatus = {type: 'error', code: 4};
+    }
+
+    // success
   }
 
 

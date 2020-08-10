@@ -11,6 +11,7 @@ import {VerificationService} from '../verification.service';
 export class FormularComponent implements OnInit {
 
   form: FormGroup;
+  verificationStatus: object;
 
   constructor(private formbuilder: FormBuilder, private verificationService: VerificationService) { }
 
@@ -40,5 +41,9 @@ export class FormularComponent implements OnInit {
 
   verifyClick(): void {
     this.verificationService.verify(this.form.value);
+  }
+
+  getVerificationStatus(){
+
   }
 }
