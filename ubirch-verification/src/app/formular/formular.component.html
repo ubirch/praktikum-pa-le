@@ -68,10 +68,15 @@
         <button type="submit" class="btn btn-primary"
                 [disabled]="!form.valid"
                 (click)="verifyClick()">verify</button>
-        <button type="button" class="btn btn-primary" (click)="getVerificationStatus()"></button>
       </form>
-      <label></label>
-    </div>
+      <hr>
+      <div class="container">
+        <div class="alert" [ngClass]="{'alert-success': response.type === 'success', 'alert-warning': response.type === 'error'}" *ngIf="response">
+          <h1>{{response.header}}</h1>
+          <p>{{response.info}}</p>
+        </div>
+      </div>
+  </div>
 </div>
 
 

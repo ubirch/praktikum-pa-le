@@ -9,5 +9,7 @@ export interface IUbirchAnchor {
   properties: any;
 }
 
+export enum EError{
 
+}
 

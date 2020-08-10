@@ -5,3 +5,15 @@
 .invalidEntry{
   border: 1px solid red;
 }
+
+.verificationSuccess{
+  border: 1px solid green;
+  background-color: #a9ffb6;
+  color: black;
+}
+
+.verificationFail{
+  border: 1px solid red;
+  background-color: #ff8285;
+  color: black;
+}
