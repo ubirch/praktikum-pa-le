@@ -25,13 +25,10 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dfcba95e-d109-4933-ad35-88c69d75fa37" name="Default Changelist" comment="HTTP requests and error handling;incomplete">
+    <list default="true" id="dfcba95e-d109-4933-ad35-88c69d75fa37" name="Default Changelist" comment="Result presented in the view">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ubirch-verification/src/app/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ubirch-verification/src/app/models.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ubirch-verification/src/app/verification.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ubirch-verification/src/app/verification.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +74,7 @@
       <workItem from="1596200481131" duration="614000" />
       <workItem from="1596203687684" duration="49427000" />
       <workItem from="1596718827435" duration="13580000" />
-      <workItem from="1597050629299" duration="14481000" />
+      <workItem from="1597050629299" duration="15449000" />
     </task>
     <task id="LOCAL-00001" summary="angular project init">
       <created>1596201079025</created>
@@ -135,7 +132,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597063150283</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Result presented in the view">
+      <created>1597069098935</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1597069098935</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -173,7 +177,8 @@
     <MESSAGE value="verification service init" />
     <MESSAGE value="JSON and hash creation" />
     <MESSAGE value="HTTP requests and error handling;incomplete" />
-    <option name="LAST_COMMIT_MESSAGE" value="HTTP requests and error handling;incomplete" />
+    <MESSAGE value="Result presented in the view" />
+    <option name="LAST_COMMIT_MESSAGE" value="Result presented in the view" />
   </component>
   <component name="WindowStateProjectService">
     <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1596201093992">
@@ -184,10 +189,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="618" y="326" key="VCS.ChangelistChooser/0.0.1536.824@0.0.1536.824" timestamp="1596631057411" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1597067646611">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1597069103904">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1597067646611" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1597069103904" />
     <state x="202" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597060325716">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

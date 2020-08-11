@@ -9,6 +9,12 @@ export interface IUbirchAnchor {
   properties: any;
 }
 
+export interface IresponseInfo {
+  type: string;
+  header: string;
+  info: string;
+}
+
 export enum EError{
 
 }

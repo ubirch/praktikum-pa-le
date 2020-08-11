@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {VerificationService} from '../verification.service';
-import {IUbirchResponse} from "../models";
-import {calcPossibleSecurityContexts} from "@angular/compiler/src/template_parser/binding_parser";
+import {IresponseInfo, IUbirchResponse} from '../models';
 
 @Component({
   selector: 'app-formular',
@@ -13,7 +12,7 @@ import {calcPossibleSecurityContexts} from "@angular/compiler/src/template_parse
 export class FormularComponent implements OnInit {
 
   form: FormGroup;
-  response: any;
+  responseInfo: IresponseInfo;
 
   constructor(private formbuilder: FormBuilder, private verificationService: VerificationService) { }
 
@@ -44,8 +43,8 @@ export class FormularComponent implements OnInit {
   verifyClick(): void {
     this.verificationService.verify(this.form.value).subscribe(
       response => {
-        const responseObj = this.checkResponse(response.body);
-        this.handleResponse(responseObj);
+        const responseCode = this.checkResponse(response.body);
+        this.handleResponse(responseCode);
       },
       error => {
           this.handleError(error);
@@ -54,17 +53,17 @@ export class FormularComponent implements OnInit {
     );
   }
 
-  checkResponse(response: object){
+  checkResponse(response: object): number{
     if (!response){
       // error 'Verification failed empty response'
-      return {code: 1};
+      return 1;
     }
 
     const responseObj: IUbirchResponse = response;
 
     if (!responseObj){
       // error 'Verification failed empty response'
-      return {code: 1};
+      return  1;
     }
 
     const seal = responseObj.upp;
@@ -72,45 +71,45 @@ export class FormularComponent implements OnInit {
 
     if (!seal || !seal.length){
       // error 'Verification failed missing seal in response'
-      return {code: 2};
+      return 2;
     }
-
-    // verification successful
-    return {code: 0};
 
     const blockchainTX = responseObj.anchors;
 
     if (!blockchainTX || !blockchainTX.length){
       // error 'no anchors'
-      return {code: 3};
+      return 3;
     }
+
+    // verification successful
+    return 0;
   }
 
-  handleResponse(responseObj) {
-   switch (responseObj.code){
+  handleResponse(responseCode): void {
+   switch (responseCode){
      case 0: {
-       this.response = {type: 'success', header: 'Verifikation erfolgreich', info: 'Die Verifikation Ihres tests war erfolgreich'};
+       this.responseInfo = {type: 'success', header: 'Verifikation erfolgreich', info: 'Die Verifikation Ihres tests war erfolgreich'};
        break;
      }
      case 1: {
-       this.response = {type: 'error', header: 'Verifikation fehlgeschlagen', info: 'Verification failed empty response'};
+       this.responseInfo = {type: 'error', header: 'Verifikation fehlgeschlagen', info: 'Verification failed empty response'};
        break;
      }
      case 2: {
-       this.response = {type: 'error', header: 'Verifikation fehlgeschlagen', info: 'Verification failed, missing seal'};
+       this.responseInfo = {type: 'error', header: 'Verifikation fehlgeschlagen', info: 'Verification failed, missing seal'};
        break;
      }
      case 3: {
-       this.response = {type: 'error', header: 'Fehlende Verankerungen', info: 'Es gibt keine Blockchain-Verankerungen'};
+       this.responseInfo = {type: 'error', header: 'Fehlende Verankerungen', info: 'Es gibt keine Blockchain-Verankerungen'};
      }
    }
   }
 
-  handleError(error){
+  handleError(error): void{
     if (error.status === 404){
-      this.response = {type: 'error', header: 'Verifikation fehlgeschlagen', info: 'Es konnte kein Zertifikat gefunden werden'}
+      this.responseInfo = {type: 'error', header: 'Verifikation fehlgeschlagen', info: 'Es konnte kein Zertifikat gefunden werden'};
     }else{
-      this.response = {type: 'error', header: 'Es ist ein unerwarteter Fehler aufgetreten'};
+      this.responseInfo = {type: 'error', header: 'Verifikation fehlgeschlagen', info: 'Es ist ein unerwarteter Fehler aufgetreten'};
     }
 
   }
