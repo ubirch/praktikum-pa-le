@@ -19,7 +19,7 @@
         <div class="form-group">
           <label for="birthDate">Birth Date</label>
           <input [ngClass]="{validEntry: birthDate.valid, invalidEntry: birthDate.invalid}"
-                 type="number" id="birthDate" class="form-control"
+                 type="text" id="birthDate" class="form-control"
                  formControlName="b" placeholder="yyyymmdd">
         </div>
 
@@ -40,7 +40,7 @@
         <div class="form-group">
           <label for="testDateTime">Test date and time</label>
           <input [ngClass]="{validEntry: testDateTime.valid, invalidEntry: testDateTime.invalid}"
-                 type="number" id="testDateTime" class="form-control"
+                 type="text" id="testDateTime" class="form-control"
                  formControlName="d" required placeholder="yyyymmddtttt">
         </div>
 
@@ -71,9 +71,9 @@
       </form>
       <hr>
       <div class="container">
-        <div class="alert" [ngClass]="{'alert-success': response.type === 'success', 'alert-warning': response.type === 'error'}" *ngIf="response">
-          <h1>{{response.header}}</h1>
-          <p>{{response.info}}</p>
+        <div class="alert" [ngClass]="{'alert-success': responseInfo.type === 'success', 'alert-warning': responseInfo.type === 'error'}" *ngIf="responseInfo">
+          <h1>{{responseInfo.header}}</h1>
+          <p>{{responseInfo.info}}</p>
         </div>
       </div>
   </div>

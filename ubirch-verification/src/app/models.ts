@@ -9,7 +9,7 @@ export interface IUbirchAnchor {
   properties: any;
 }
 
-export interface IresponseInfo {
+export interface IResponseInfo {
   type: string;
   header: string;
   info: string;

@@ -12,7 +12,6 @@ import {IUbirchResponse} from './models';
 export class VerificationService {
 
   verificationApiUrl = 'https://verify.prod.ubirch.com/api/upp/verify/anchor?blockchain_info=ext';
-  verificationStatus: any;
 
   constructor(private http: HttpClient) {
   }
@@ -20,6 +19,8 @@ export class VerificationService {
   verify(fData): any {
     const json = this.createJson(fData);
     const hash = this.createHash(json);
+    console.log(json);
+    console.log(hash);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'text/plain'

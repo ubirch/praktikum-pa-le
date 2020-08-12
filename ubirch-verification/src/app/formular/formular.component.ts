@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {VerificationService} from '../verification.service';
-import {IresponseInfo, IUbirchResponse} from '../models';
+import {IResponseInfo, IresponseInfo, IUbirchResponse} from '../models';
+import {VerificationStates} from '../verification-states.enum';
 
 @Component({
   selector: 'app-formular',
@@ -12,9 +13,10 @@ import {IresponseInfo, IUbirchResponse} from '../models';
 export class FormularComponent implements OnInit {
 
   form: FormGroup;
-  responseInfo: IresponseInfo;
+  responseInfo: IResponseInfo;
 
-  constructor(private formbuilder: FormBuilder, private verificationService: VerificationService) { }
+  constructor(private formbuilder: FormBuilder, private verificationService: VerificationService) {
+  }
 
   ngOnInit(): void {
     this.form = this.formbuilder.group({
@@ -30,86 +32,133 @@ export class FormularComponent implements OnInit {
     });
   }
 
-  get fName() { return this.form.get('f'); }
-  get gName() { return this.form.get('g'); }
-  get birthDate() { return this.form.get('b'); }
-  get idNumber() { return this.form.get('p'); }
-  get labId() { return this.form.get('i'); }
-  get testDateTime() { return this.form.get('d'); }
-  get testType() { return this.form.get('t'); }
-  get testResult() { return this.form.get('r'); }
-  get ranNum() { return this.form.get('s'); }
+  get fName() {
+    return this.form.get('f');
+  }
+
+  get gName() {
+    return this.form.get('g');
+  }
+
+  get birthDate() {
+    return this.form.get('b');
+  }
+
+  get idNumber() {
+    return this.form.get('p');
+  }
+
+  get labId() {
+    return this.form.get('i');
+  }
+
+  get testDateTime() {
+    return this.form.get('d');
+  }
+
+  get testType() {
+    return this.form.get('t');
+  }
+
+  get testResult() {
+    return this.form.get('r');
+  }
+
+  get ranNum() {
+    return this.form.get('s');
+  }
 
   verifyClick(): void {
     this.verificationService.verify(this.form.value).subscribe(
       response => {
         const responseCode = this.checkResponse(response.body);
         this.handleResponse(responseCode);
+        console.log('verification finished');
       },
       error => {
-          this.handleError(error);
-        }
-
+        this.handleError(error);
+      }
     );
   }
 
-  checkResponse(response: object): number{
-    if (!response){
+  checkResponse(response: object): number {
+    if (!response) {
       // error 'Verification failed empty response'
-      return 1;
+      return VerificationStates.Empty_Response;
     }
 
     const responseObj: IUbirchResponse = response;
 
-    if (!responseObj){
+    if (!responseObj) {
       // error 'Verification failed empty response'
-      return  1;
+      return VerificationStates.Empty_Response;
     }
 
     const seal = responseObj.upp;
     console.log(seal);
 
-    if (!seal || !seal.length){
+    if (!seal || !seal.length) {
       // error 'Verification failed missing seal in response'
-      return 2;
+      return VerificationStates.No_seal_found;
     }
 
     const blockchainTX = responseObj.anchors;
 
-    if (!blockchainTX || !blockchainTX.length){
-      // error 'no anchors'
-      return 3;
+    if (!blockchainTX || !blockchainTX.length) {
+      // warning 'no anchors'
+      return VerificationStates.Achors_not_found;
     }
 
     // verification successful
-    return 0;
+    return VerificationStates.Verification_successful;
   }
 
   handleResponse(responseCode): void {
-   switch (responseCode){
-     case 0: {
-       this.responseInfo = {type: 'success', header: 'Verifikation erfolgreich', info: 'Die Verifikation Ihres tests war erfolgreich'};
-       break;
-     }
-     case 1: {
-       this.responseInfo = {type: 'error', header: 'Verifikation fehlgeschlagen', info: 'Verification failed empty response'};
-       break;
-     }
-     case 2: {
-       this.responseInfo = {type: 'error', header: 'Verifikation fehlgeschlagen', info: 'Verification failed, missing seal'};
-       break;
-     }
-     case 3: {
-       this.responseInfo = {type: 'error', header: 'Fehlende Verankerungen', info: 'Es gibt keine Blockchain-Verankerungen'};
-     }
-   }
+    switch (responseCode) {
+      case VerificationStates.Verification_successful: {
+        this.responseInfo = {
+          type: 'success',
+          header: 'Verifikation erfolgreich',
+          info: 'Die Verifikation Ihres Tests war erfolgreich'
+        };
+        break;
+      }
+      case VerificationStates.Empty_Response: {
+        this.responseInfo = {
+          type: 'error',
+          header: 'Verifikation fehlgeschlagen',
+          info: 'Verification failed empty response'
+        };
+        break;
+      }
+      case VerificationStates.No_seal_found: {
+        this.responseInfo = {
+          type: 'error',
+          header: 'Verifikation fehlgeschlagen',
+          info: 'Verification failed, missing seal'
+        };
+        break;
+      }
+      case VerificationStates.Achors_not_found: {
+        this.responseInfo = {
+          type: 'warning',
+          header: 'Fehlende Verankerungen',
+          info: 'Es gibt keine Blockchain-Verankerungen'
+        };
+      }
+    }
   }
 
-  handleError(error): void{
-    if (error.status === 404){
-      this.responseInfo = {type: 'error', header: 'Verifikation fehlgeschlagen', info: 'Es konnte kein Zertifikat gefunden werden'};
-    }else{
-      this.responseInfo = {type: 'error', header: 'Verifikation fehlgeschlagen', info: 'Es ist ein unerwarteter Fehler aufgetreten'};
+  handleError(error): void {
+    if (error.status === 404) {
+      this.responseInfo = {
+        type: 'error',
+        header: 'Verifikation fehlgeschlagen',
+        info: 'Es konnte kein Zertifikat gefunden werden'
+      };
+    } else {
+      this.responseInfo = {type: 'error', header: 'Fehler', info: 'Es ist ein unerwarteter Fehler aufgetreten'};
+
     }
 
   }
