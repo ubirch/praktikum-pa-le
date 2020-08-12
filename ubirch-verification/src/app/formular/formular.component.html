@@ -1,82 +1,82 @@
 <div class="container">
-    <div>
-      <form [formGroup]="form">
+  <div>
+    <form [formGroup]="form">
 
-        <div class="form-group">
-          <label for="gName">First Name</label>
-          <input [ngClass]="{validEntry: gName.valid, invalidEntry: gName.invalid}"
-                 type="text" id="gName" class="form-control"
-                 formControlName="g" required>
-        </div>
-
-        <div class="form-group">
-          <label for="fName">Last Name</label>
-          <input [ngClass]="{validEntry: fName.valid, invalidEntry: fName.invalid}"
-                 type="text" id="fName" class="form-control"
-                 formControlName="f" required>
-        </div>
-
-        <div class="form-group">
-          <label for="birthDate">Birth Date</label>
-          <input [ngClass]="{validEntry: birthDate.valid, invalidEntry: birthDate.invalid}"
-                 type="text" id="birthDate" class="form-control"
-                 formControlName="b" placeholder="yyyymmdd">
-        </div>
-
-        <div class="form-group">
-          <label for="idNumber">Passport/Id Number</label>
-          <input [ngClass]="{validEntry: idNumber.valid, invalidEntry: idNumber.invalid}"
-                 type="text" id="idNumber" class="form-control"
-                 formControlName="p" required>
-        </div>
-
-        <div class="form-group">
-          <label for="labId">Lab ID</label>
-          <input [ngClass]="{validEntry: labId.valid, invalidEntry: labId.invalid}"
-                 type="text" id="labId" class="form-control"
-                 formControlName="i" required>
-        </div>
-
-        <div class="form-group">
-          <label for="testDateTime">Test date and time</label>
-          <input [ngClass]="{validEntry: testDateTime.valid, invalidEntry: testDateTime.invalid}"
-                 type="text" id="testDateTime" class="form-control"
-                 formControlName="d" required placeholder="yyyymmddtttt">
-        </div>
-
-        <div class="form-group">
-          <label for="testType">Test Type</label>
-          <input [ngClass]="{validEntry: testType.valid, invalidEntry: testType.invalid}"
-                 type="text" id="testType" class="form-control"
-                 formControlName="t" required>
-        </div>
-
-        <div class="form-group">
-          <label for="testResult">Test Result</label>
-          <input [ngClass]="{validEntry: testResult.valid, invalidEntry: testResult.invalid}"
-                 type="text" placeholder="x/n/p" id="testResult" class="form-control"
-                 formControlName="r" required>
-        </div>
-
-        <div class="form-group">
-          <label for="ranNum">Random Number</label>
-          <input [ngClass]="{validEntry: ranNum.valid, invalidEntry: ranNum.invalid}"
-                 type="text" id="ranNum" class="form-control"
-                 formControlName="s" required>
-        </div>
-
-        <button type="submit" class="btn btn-primary"
-                [disabled]="!form.valid"
-                (click)="verifyClick()">verify</button>
-      </form>
-      <hr>
-      <div class="container">
-        <div class="alert" [ngClass]="{'alert-success': responseInfo.type === 'success', 'alert-warning': responseInfo.type === 'error'}" *ngIf="responseInfo">
-          <h1>{{responseInfo.header}}</h1>
-          <p>{{responseInfo.info}}</p>
-        </div>
+      <div class="form-group">
+        <label for="gName">First Name</label>
+        <input [ngClass]="{validEntry: gName.valid, invalidEntry: gName.invalid}"
+               type="text" id="gName" class="form-control"
+               formControlName="g" required>
       </div>
+
+      <div class="form-group">
+        <label for="fName">Last Name</label>
+        <input [ngClass]="{validEntry: fName.valid, invalidEntry: fName.invalid}"
+               type="text" id="fName" class="form-control"
+               formControlName="f" required>
+      </div>
+
+      <div class="form-group">
+        <label for="birthDate">Birth Date</label>
+        <app-date-time [ngClass]="{validEntry: birthDate.valid, invalidEntry: birthDate.invalid}"  id="birthDate" formControlName="b"></app-date-time>
+      </div>
+
+      <div class="form-group">
+        <label for="idNumber">Passport/Id Number</label>
+        <input [ngClass]="{validEntry: idNumber.valid, invalidEntry: idNumber.invalid}"
+               type="text" id="idNumber" class="form-control"
+               formControlName="p" required>
+      </div>
+
+      <div class="form-group">
+        <label for="labId">Lab ID</label>
+        <input [ngClass]="{validEntry: labId.valid, invalidEntry: labId.invalid}"
+               type="text" id="labId" class="form-control"
+               formControlName="i" required>
+      </div>
+
+      <div class="form-group">
+        <label for="testDateTime">Test date and time</label>
+        <app-date-time id="testDateTime" formControlName="d"></app-date-time>
+      </div>
+
+      <div class="form-group">
+        <label for="testType">Test Type</label>
+        <input [ngClass]="{validEntry: testType.valid, invalidEntry: testType.invalid}"
+               type="text" id="testType" class="form-control"
+               formControlName="t" required>
+      </div>
+
+      <div class="form-group">
+        <label for="testResult">Test Result</label>
+        <input [ngClass]="{validEntry: testResult.valid, invalidEntry: testResult.invalid}"
+               type="text" placeholder="x/n/p" id="testResult" class="form-control"
+               formControlName="r" required>
+      </div>
+
+      <div class="form-group">
+        <label for="ranNum">Random Number</label>
+        <input [ngClass]="{validEntry: ranNum.valid, invalidEntry: ranNum.invalid}"
+               type="text" id="ranNum" class="form-control"
+               formControlName="s" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary"
+              [disabled]="!form.valid"
+              (click)="verifyClick()">verify
+      </button>
+    </form>
+    <hr>
+    <div class="container">
+      <div class="alert"
+           [ngClass]="{'alert-success': responseInfo.type === 'success', 'alert-warning': responseInfo.type === 'error'}"
+           *ngIf="responseInfo">
+        <h1>{{responseInfo.header}}</h1>
+        <p>{{responseInfo.info}}</p>
+      </div>
+    </div>
   </div>
+  <hr>
 </div>
 
 

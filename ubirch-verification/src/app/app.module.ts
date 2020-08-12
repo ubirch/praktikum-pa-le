@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 import { FormularComponent } from './formular/formular.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from "@angular/common/http";
+import { DateTimeComponent } from './formular/DateTime/date-time/date-time.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FormularComponent
+    FormularComponent,
+    DateTimeComponent
   ],
     imports: [
         BrowserModule,

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {VerificationService} from '../verification.service';
-import {IResponseInfo, IresponseInfo, IUbirchResponse} from '../models';
+import {IResponseInfo, IUbirchResponse} from '../models';
 import {VerificationStates} from '../verification-states.enum';
 
 @Component({
@@ -157,8 +157,11 @@ export class FormularComponent implements OnInit {
         info: 'Es konnte kein Zertifikat gefunden werden'
       };
     } else {
-      this.responseInfo = {type: 'error', header: 'Fehler', info: 'Es ist ein unerwarteter Fehler aufgetreten'};
-
+      this.responseInfo = {
+        type: 'error',
+        header: 'Fehler',
+        info: 'Es ist ein unerwarteter Fehler aufgetreten'
+      };
     }
 
   }
