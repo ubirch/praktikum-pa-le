@@ -15,7 +15,22 @@ export interface IResponseInfo {
   info: string;
 }
 
-export enum EError{
+export interface IUbirchAnchorProperties {
+  blockchain: string;
+  created: string;
+  hash: string;
+  message: string;
+  network_info: string;
+  network_type: string;
+  prev_hash: string;
+  public_chaing: string;
+  status: string;
+  timestamp: string;
+  txid: string;
+}
 
+export interface IUbirchBlockchainNet {
+  url: string;
+  icon_url: string;
 }
 

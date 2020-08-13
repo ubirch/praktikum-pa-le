@@ -1,2 +1,6 @@
-
-<input type="datetime-local" id="dateTime" class="form-control" ngModel="val">
+<input type="date" id="date" class="form-control" [value]="value" [disabled]="disabled" (input)="onInput($event)"
+       *ngIf="withTimeFlag === false"
+       [ngClass]="{valid: this.value, invalid: !this.value}">
+<input type="datetime-local" id="dateTime" class="form-control" [value]="value" [disabled]="disabled"
+       (input)="onInput($event)" *ngIf="withTimeFlag === true"
+       [ngClass]="{valid: this.value, invalid: !this.value}">

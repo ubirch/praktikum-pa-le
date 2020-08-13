@@ -1,0 +1,12 @@
+.valid{
+  border: 1px solid green;
+}
+
+.invalid{
+  border: 1px solid red;
+}
+
+.untouched{
+  border: 1px solid darkslategrey;
+}
+

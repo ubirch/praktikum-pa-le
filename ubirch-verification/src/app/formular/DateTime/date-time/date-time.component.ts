@@ -9,40 +9,62 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: DateTimeComponent,
+      useExisting: forwardRef(() => DateTimeComponent),
       multi: true
     }
   ]
 })
 export class DateTimeComponent implements ControlValueAccessor {
 
-  @Input('value')
-  val: string;
+  disabled: boolean;
+  value: string;
 
-  onChange: any = () => { };
-  onTouched: any = () => { };
+  @Input() withTimeFlag = false;
+  @Input() dateFormat: any;
 
-  get value() {
-    console.log(this.val);
-    return this.val;
+  onChange: any = () => {
+  };
+  onTouched: any = () => {
+  };
+
+
+  constructor() {
+
   }
 
-  set value(val) {
-    this.val = val;
-    this.onChange(val);
-    this.onTouched();
-  }  // We implement this method to keep a reference to the onChange
-  // callback function passed by the forms API
-  registerOnChange(fn) {
+  writeValue(value: any) {
+    this.value = value ? value : '';
+  }
+
+  registerOnChange(fn: any) {
     this.onChange = fn;
-  }  // We implement this method to keep a reference to the onTouched
-  // callback function passed by the forms API
-  registerOnTouched(fn) {
+  }
+
+  registerOnTouched(fn: any) {
     this.onTouched = fn;
-  }  // This is a basic setter that the forms API is going to use
-  writeValue(value) {
-    if (value) {
-      this.value = value;
+  }
+
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
+  }
+
+  onInput(event) {
+    this.value = event.target.value;
+    const year = event.target.value.slice(0, 4);
+    console.log(year);
+    const month = event.target.value.slice(5, 7);
+    console.log(month);
+    const day = event.target.value.slice(8, 10);
+    console.log(day);
+
+    if (this.withTimeFlag === true){
+      const time = event.target.value.slice(11, 13) + event.target.value.slice(14, 16);
+      const data: string = year + month + day + time;
+      this.onChange(data);
+    }else{
+      const data: string = year + month + day;
+      this.onChange(data);
     }
   }
 }
+
