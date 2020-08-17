@@ -12,6 +12,8 @@ import {IUbirchResponse} from './models';
 export class VerificationService {
 
   verificationApiUrl = 'https://verify.prod.ubirch.com/api/upp/verify/anchor?blockchain_info=ext';
+  json: string;
+  hash: string;
 
   constructor(private http: HttpClient) {
   }
@@ -31,6 +33,7 @@ export class VerificationService {
 
   createJson(formData): string {
     const json = JSON.stringify(formData);
+    this.json = json;
     return json;
   }
 
@@ -38,6 +41,7 @@ export class VerificationService {
     let transIdAB: ArrayBuffer;
     transIdAB = sha256.arrayBuffer(json);
     const transId: string = btoa(new Uint8Array(transIdAB).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+    this.hash = transId;
     return transId;
   }
 }

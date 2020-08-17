@@ -34,3 +34,25 @@ export interface IUbirchBlockchainNet {
   icon_url: string;
 }
 
+export interface IUbirchblockchain {
+  nodeIcon: string;
+  explorerUrl: IUbirchBlockchainTransidCheckUrl;
+}
+
+export interface IUbirchBlockchainTransidCheckUrl {
+  bdr?: IUbirchBlockchainNet;
+  testnet?: IUbirchBlockchainNet;
+  mainnet?: IUbirchBlockchainNet;
+}
+
+export interface IUbirchAnchorObject{
+  href: any;
+  target: string;
+  title: string;
+  icon: string;
+}
+
+export interface IUbirchSeal{
+  src: string;
+  href: string;
+}

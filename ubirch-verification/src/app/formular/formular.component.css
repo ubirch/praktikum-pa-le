@@ -1,24 +1,23 @@
-.validEntry{
+.validEntry {
   border: 1px solid green;
 }
 
-.invalidEntry{
+.invalidEntry {
   border: 1px solid red;
-  background-color: rgba(255,0,16,0.09);
+  background-color: rgba(255, 0, 16, 0.09);
 }
 
-.untouched{
+.untouched {
   border: 1px solid darkslategrey;
-
 }
 
-.verificationSuccess{
+.verificationSuccess {
   border: 1px solid green;
   background-color: #a9ffb6;
   color: black;
 }
 
-.verificationFail{
+.verificationFail {
   border: 1px solid red;
   background-color: #ff8285;
   color: black;
