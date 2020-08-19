@@ -1,91 +1,103 @@
 <div class="container">
+
   <h1>Ubirch Verification</h1>
   <div>
     <form [formGroup]="form">
+      <div class="row">
+        <div class="column">
+          <div class="form-group">
+            <label for="gName">First Name</label>
+            <input [ngClass]="{validEntry: gName.valid, invalidEntry: gName.invalid}"
+                   class="form-control" formControlName="g" id="gName"
+                   required type="text">
+          </div>
 
-      <div class="form-group">
-        <label for="gName">First Name</label>
-        <input [ngClass]="{validEntry: gName.valid, invalidEntry: gName.invalid}"
-               type="text" id="gName" class="form-control"
-               formControlName="g" required>
+          <div class="form-group">
+            <label for="fName">Last Name</label>
+            <input [ngClass]="{validEntry: fName.valid, invalidEntry: fName.invalid}"
+                   class="form-control" formControlName="f" id="fName"
+                   required type="text">
+          </div>
+
+          <div class="form-group">
+            <label for="birthDate">Birth Date</label>
+            <app-date-time formControlName="b" id="birthDate"></app-date-time>
+          </div>
+
+          <div class="form-group">
+            <label for="idNumber">Passport/Id Number</label>
+            <input [ngClass]="{validEntry: idNumber.valid, invalidEntry: idNumber.invalid}"
+                   class="form-control" formControlName="p" id="idNumber"
+                   required type="text">
+          </div>
+
+          <div class="form-group">
+            <label for="labId">Lab ID</label>
+            <input [ngClass]="{validEntry: labId.valid, invalidEntry: labId.invalid}"
+                   class="form-control" formControlName="i" id="labId"
+                   required type="text">
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="form-group">
+            <label for="testDateTime">Test date and time</label>
+            <app-date-time [withTimeFlag]="true" formControlName="d" id="testDateTime"></app-date-time>
+          </div>
+
+          <div class="form-group">
+            <label for="testType">Test Type</label>
+            <input [ngClass]="{validEntry: testType.valid, invalidEntry: testType.invalid}"
+                   class="form-control" formControlName="t" id="testType"
+                   required type="text">
+          </div>
+
+          <div class="form-group">
+            <label for="testResult">Test Result</label>
+            <input [ngClass]="{validEntry: testResult.valid, invalidEntry: testResult.invalid}"
+                   class="form-control" formControlName="r" id="testResult" placeholder="x/n/p"
+                   required type="text">
+          </div>
+
+          <div class="form-group">
+            <label for="ranNum">Random Number</label>
+            <input [ngClass]="{validEntry: ranNum.valid, invalidEntry: ranNum.invalid}"
+                   class="form-control" formControlName="s" id="ranNum"
+                   required type="text">
+          </div>
+
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="fName">Last Name</label>
-        <input [ngClass]="{validEntry: fName.valid, invalidEntry: fName.invalid}"
-               type="text" id="fName" class="form-control"
-               formControlName="f" required>
-      </div>
-
-      <div class="form-group">
-        <label for="birthDate">Birth Date</label>
-        <app-date-time id="birthDate" formControlName="b"></app-date-time>
-      </div>
-
-      <div class="form-group">
-        <label for="idNumber">Passport/Id Number</label>
-        <input [ngClass]="{validEntry: idNumber.valid, invalidEntry: idNumber.invalid}"
-               type="text" id="idNumber" class="form-control"
-               formControlName="p" required>
-      </div>
-
-      <div class="form-group">
-        <label for="labId">Lab ID</label>
-        <input [ngClass]="{validEntry: labId.valid, invalidEntry: labId.invalid}"
-               type="text" id="labId" class="form-control"
-               formControlName="i" required>
-      </div>
-
-      <div class="form-group">
-        <label for="testDateTime">Test date and time</label>
-        <app-date-time id="testDateTime" formControlName="d" [withTimeFlag]="true"></app-date-time>
-      </div>
-
-      <div class="form-group">
-        <label for="testType">Test Type</label>
-        <input [ngClass]="{validEntry: testType.valid, invalidEntry: testType.invalid}"
-               type="text" id="testType" class="form-control"
-               formControlName="t" required>
-      </div>
-
-      <div class="form-group">
-        <label for="testResult">Test Result</label>
-        <input [ngClass]="{validEntry: testResult.valid, invalidEntry: testResult.invalid}"
-               type="text" placeholder="x/n/p" id="testResult" class="form-control"
-               formControlName="r" required>
-      </div>
-
-      <div class="form-group">
-        <label for="ranNum">Random Number</label>
-        <input [ngClass]="{validEntry: ranNum.valid, invalidEntry: ranNum.invalid}"
-               type="text" id="ranNum" class="form-control"
-               formControlName="s" required>
-      </div>
-
-      <button type="submit" class="btn btn-primary"
-              [disabled]="!form.valid"
-              (click)="verifyClick()">verify
+      <button (click)="verifyClick()" [disabled]="!form.valid"
+              class="btn btn-primary"
+              type="submit">verify
       </button>
+
     </form>
+
     <hr *ngIf="responseInfo">
+
     <div class="container">
 
-      <a href="{{seal.href}}" *ngIf="seal.src">
-        <img src="{{seal.src}}" alt="UbirchSeal" height="64px" width="64px">
+      <a *ngIf="seal.src" href="{{seal.href}}">
+        <img alt="UbirchSeal" height="64px" src="{{seal.src}}" width="64px">
       </a>
 
       <a *ngFor="let anchor of anchors" href="{{anchor.href}}">
-        <img width="64px" height="64px" src="{{anchor.icon}}" alt="{{anchor.title}}" href="{{anchor.href}}">
+        <img alt="{{anchor.title}}" height="64px" src="{{anchor.icon}}" width="64px">
         <p *ngIf="!anchor.icon">{{anchor.title}}</p>
       </a>
+
       <hr *ngIf="seal.src">
 
-      <div class="alert"
+      <div *ngIf="responseInfo"
            [ngClass]="{'alert-success': responseInfo.type === 'success', 'alert-warning': responseInfo.type === 'error'}"
-           *ngIf="responseInfo">
+           class="alert">
         <h1>{{responseInfo.header}}</h1>
         <p>{{responseInfo.info}}</p>
       </div>
+
     </div>
   </div>
   <hr>
