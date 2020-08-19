@@ -67,17 +67,18 @@
               (click)="verifyClick()">verify
       </button>
     </form>
-    <hr>
+    <hr *ngIf="responseInfo">
     <div class="container">
 
       <a href="{{seal.href}}" *ngIf="seal.src">
-        <img src="{{seal.src}}" alt="UbirchSeal"  height="64px" width="64px">
+        <img src="{{seal.src}}" alt="UbirchSeal" height="64px" width="64px">
       </a>
 
       <a *ngFor="let anchor of anchors" href="{{anchor.href}}">
         <img width="64px" height="64px" src="{{anchor.icon}}" alt="{{anchor.title}}" href="{{anchor.href}}">
         <p *ngIf="!anchor.icon">{{anchor.title}}</p>
       </a>
+      <hr *ngIf="seal.src">
 
       <div class="alert"
            [ngClass]="{'alert-success': responseInfo.type === 'success', 'alert-warning': responseInfo.type === 'error'}"

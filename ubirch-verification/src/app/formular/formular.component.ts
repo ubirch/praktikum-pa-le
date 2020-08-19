@@ -1,16 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {VerificationService} from '../verification.service';
 import {
   IResponseInfo,
-  IUbirchAnchor, IUbirchAnchorObject,
+  IUbirchAnchorObject,
   IUbirchAnchorProperties,
   IUbirchblockchain,
   IUbirchBlockchainNet,
-  IUbirchResponse, IUbirchSeal
+  IUbirchResponse,
+  IUbirchSeal
 } from '../models';
 import {VerificationStates} from '../verification-states.enum';
 import BlockchainSettings from '../../assets/blockchain-settings.json';
+import VerificationConfig from '../../assets/Verification-comfig.json';
+
 
 @Component({
   selector: 'app-formular',
@@ -22,14 +25,47 @@ export class FormularComponent implements OnInit {
 
   form: FormGroup;
   responseInfo: IResponseInfo;
-  assetUrlPrefix = 'https://console.dev.ubirch.com/libs/verification/';
-  consoleVerifyUrl = 'https://console.prod.ubirch.com/verification';
-  seal: IUbirchSeal = {};
+  seal: IUbirchSeal;
   anchors = [];
 
 
-
   constructor(private formbuilder: FormBuilder, private verificationService: VerificationService) {
+  }
+
+  get fName(): AbstractControl {
+    return this.form.get('f');
+  }
+
+  get gName(): AbstractControl {
+    return this.form.get('g');
+  }
+
+  get birthDate(): AbstractControl {
+    return this.form.get('b');
+  }
+
+  get idNumber(): AbstractControl {
+    return this.form.get('p');
+  }
+
+  get labId(): AbstractControl {
+    return this.form.get('i');
+  }
+
+  get testDateTime(): AbstractControl {
+    return this.form.get('d');
+  }
+
+  get testType(): AbstractControl {
+    return this.form.get('t');
+  }
+
+  get testResult(): AbstractControl{
+    return this.form.get('r');
+  }
+
+  get ranNum(): AbstractControl {
+    return this.form.get('s');
   }
 
   ngOnInit(): void {
@@ -44,42 +80,8 @@ export class FormularComponent implements OnInit {
       s: ['2fe00c151cb726bb9ed7', Validators.required],
       t: ['PCR', Validators.required]
     });
-  }
 
-  get fName() {
-    return this.form.get('f');
-  }
-
-  get gName() {
-    return this.form.get('g');
-  }
-
-  get birthDate() {
-    return this.form.get('b');
-  }
-
-  get idNumber() {
-    return this.form.get('p');
-  }
-
-  get labId() {
-    return this.form.get('i');
-  }
-
-  get testDateTime() {
-    return this.form.get('d');
-  }
-
-  get testType() {
-    return this.form.get('t');
-  }
-
-  get testResult() {
-    return this.form.get('r');
-  }
-
-  get ranNum() {
-    return this.form.get('s');
+    this.seal = {};
   }
 
   verifyClick(): void {
@@ -127,12 +129,12 @@ export class FormularComponent implements OnInit {
     }
 
     // verification successful
-    blockchainTX.forEach((item, index) => {
+    blockchainTX.forEach((item) => {
       if (!item || !item.properties) {
         return;
-      }else{
+      } else {
         console.log('pre show anchors: ' + this.anchors);
-        this.showBloxTXIcon(item.properties, index);
+        this.showBloxTXIcon(item.properties);
         console.log('post show anchors: ' + this.anchors);
       }
     });
@@ -194,20 +196,20 @@ export class FormularComponent implements OnInit {
     }
   }
 
-  showSeal(responseCode, hash: string) {
+  showSeal(responseCode, hash: string): void {
 
     if (responseCode === VerificationStates.Verification_successful) {
-      this.seal.src = this.assetUrlPrefix + 'ubirch_verify_right.png';
+      this.seal.src = VerificationConfig.assets_url_prefix + VerificationConfig.seal_icon_url;
 
       const encodedHash: string = encodeURIComponent(hash);
-      this.seal.href = this.consoleVerifyUrl + encodedHash;
+      this.seal.href = VerificationConfig.console_verify_url + encodedHash;
     } else {
-      this.seal.src = this.assetUrlPrefix + 'ubirch_verify_wrong.png';
+      this.seal.src = VerificationConfig.assets_url_prefix + VerificationConfig.no_seal_icon_url;
     }
   }
 
-  showBloxTXIcon(bloxTX: IUbirchAnchorProperties, index: number): void {
-    console.log('bloxTX = ' +  bloxTX);
+  showBloxTXIcon(bloxTX: IUbirchAnchorProperties): void {
+    console.log('bloxTX = ' + bloxTX);
     if (!bloxTX) {
       return;
     }
@@ -235,15 +237,13 @@ export class FormularComponent implements OnInit {
       anchor.href = bloxTXData.url.toString() + bloxTX.txid;
     }
 
-    const titleStr: string = bloxTX.network_info ? bloxTX.network_info : bloxTX.blockchain;
-
-    anchor.title = titleStr;
+    anchor.title = bloxTX.network_info ? bloxTX.network_info : bloxTX.blockchain;
     anchor.target = '_blanc';
 
     if (blox.nodeIcon) {
       console.log('nodeIcon = ' + blox.nodeIcon);
-      anchor.icon = this.assetUrlPrefix + blox.nodeIcon.split('/')[2];
+      anchor.icon = VerificationConfig.assets_url_prefix + blox.nodeIcon.split('/')[2];
     }
     this.anchors.push(anchor);
- }
+  }
 }

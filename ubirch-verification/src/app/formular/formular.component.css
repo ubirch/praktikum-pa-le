@@ -4,7 +4,6 @@
 
 .invalidEntry {
   border: 1px solid red;
-  background-color: rgba(255, 0, 16, 0.09);
 }
 
 .untouched {

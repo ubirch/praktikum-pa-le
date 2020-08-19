@@ -56,3 +56,11 @@ export interface IUbirchSeal{
   src: string;
   href: string;
 }
+
+export interface IUbirchVerificationEnvConfig {
+  verify_api_url: string;
+  seal_icon_url: string;
+  no_seal_icon_url: string;
+  console_verify_url: string;
+  asset_url_prefix: string;
+}

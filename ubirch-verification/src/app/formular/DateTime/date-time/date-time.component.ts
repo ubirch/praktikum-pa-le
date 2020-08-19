@@ -1,5 +1,4 @@
-import {Component, forwardRef, HostBinding, Input, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, forwardRef, Input} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
 
 @Component({
@@ -22,15 +21,15 @@ export class DateTimeComponent implements ControlValueAccessor {
   @Input() withTimeFlag = false;
   @Input() dateFormat: any;
 
-  onChange: any = () => {
-  };
-  onTouched: any = () => {
-  };
-
-
   constructor() {
 
   }
+
+  onChange: any = () => {
+  };
+
+  onTouched: any = () => {
+  };
 
   writeValue(value: any) {
     this.value = value ? value : '';
@@ -57,11 +56,11 @@ export class DateTimeComponent implements ControlValueAccessor {
     const day = event.target.value.slice(8, 10);
     console.log(day);
 
-    if (this.withTimeFlag === true){
+    if (this.withTimeFlag === true) {
       const time = event.target.value.slice(11, 13) + event.target.value.slice(14, 16);
       const data: string = year + month + day + time;
       this.onChange(data);
-    }else{
+    } else {
       const data: string = year + month + day;
       this.onChange(data);
     }
