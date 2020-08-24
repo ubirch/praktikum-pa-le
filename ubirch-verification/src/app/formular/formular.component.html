@@ -5,6 +5,9 @@
     <form [formGroup]="form">
       <div class="row">
         <div class="column">
+
+          <h2>Persönliche Daten</h2>
+
           <div class="form-group">
             <label for="gName">First Name</label>
             <input [ngClass]="{validEntry: gName.valid, invalidEntry: gName.invalid}"
@@ -31,15 +34,20 @@
                    required type="text">
           </div>
 
+
+        </div>
+
+        <div class="column">
+
+          <h2>Testdaten</h2>
+
           <div class="form-group">
             <label for="labId">Lab ID</label>
             <input [ngClass]="{validEntry: labId.valid, invalidEntry: labId.invalid}"
                    class="form-control" formControlName="i" id="labId"
                    required type="text">
           </div>
-        </div>
 
-        <div class="column">
           <div class="form-group">
             <label for="testDateTime">Test date and time</label>
             <app-date-time [withTimeFlag]="true" formControlName="d" id="testDateTime"></app-date-time>
@@ -59,7 +67,7 @@
                    required type="text">
           </div>
 
-          <div class="form-group">
+          <div class="form-group" hidden="hidden">
             <label for="ranNum">Random Number</label>
             <input [ngClass]="{validEntry: ranNum.valid, invalidEntry: ranNum.invalid}"
                    class="form-control" formControlName="s" id="ranNum"
