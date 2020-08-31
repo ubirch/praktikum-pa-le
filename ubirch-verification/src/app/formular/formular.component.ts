@@ -81,7 +81,7 @@ export class FormularComponent implements OnInit {
       t: ['PCR', Validators.required]
     });
 
-    this.seal = {};
+    this.seal = {href: '', src: ''};
   }
 
   verifyClick(): void {
@@ -231,7 +231,7 @@ export class FormularComponent implements OnInit {
     }
 
     const bloxTXData: IUbirchBlockchainNet = blox.explorerUrl[networkType];
-    const anchor: IUbirchAnchorObject = {};
+    const anchor: IUbirchAnchorObject = {href: undefined, icon: '', target: '', title: ''};
 
     if (bloxTXData.url) {
       anchor.href = bloxTXData.url.toString() + bloxTX.txid;
