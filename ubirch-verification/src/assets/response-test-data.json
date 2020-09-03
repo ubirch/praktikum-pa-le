@@ -1,0 +1,33 @@
+{
+    "upp": "liPEELGTockiA0KJq5UQnUrg0nPEQPbioaIt88/YAmuhxlv3usqgkmSCtWgNuGlqJJhPVghGMZoRpkQD+lWnYq1UdT/xCUE4URfR0rQDi2vkCS4rmhYAxCDUQ1gq4nKHZpv9rujMjIQcsV1Vf4REUgqNTkZGOBNojsRA09m6U3mzT0G6i4wQiLOXd7uKdUyEia4BEtgHj9wKMQH7HLlIHdTQmoanSjqirBjU68KhcpqjGG4/7UdgKa8lfA==",
+    "prev": null,
+    "anchors": [
+        {
+          "label": "PUBLIC_CHAIN",
+          "properties": {
+            "public_chain": "ETHEREUM_MAINNET_FRONTIER_MAINNET_NETWORK",
+            "hash": "0x673357ed644c9af67f81628acb8757f5b0c24cd198ba32e7efe54458710864ac",
+            "timestamp": "2020-07-02T06:29:20.887Z",
+            "prev_hash": "db709ce7861d98746a0893442ca669993bbcadb76e4188ab0307da0df44cbe2d0684608432ad4d1251305e48d0feef37d6195334266533b511fcdd6315404839"
+          }
+        },
+        {
+          "label": "PUBLIC_CHAIN",
+          "properties": {
+            "public_chain": "IOTA_MAINNET_IOTA_MAINNET_NETWORK",
+            "hash": "IWNSDQOMXRBANZEWONAYKENQTMLUUZFA9KEWAMURJXHVFZVFC9HMRWGKKYSMGMWLFRKZBMUKCZ9GA9999",
+            "timestamp": "2020-07-02T06:29:55.273Z",
+            "prev_hash": "db709ce7861d98746a0893442ca669993bbcadb76e4188ab0307da0df44cbe2d0684608432ad4d1251305e48d0feef37d6195334266533b511fcdd6315404839"
+          }
+        },
+        {
+          "label": "PUBLIC_CHAIN",
+          "properties": {
+            "public_chain": "ETHEREUM-CLASSIC_MAINNET_ETHERERUM_CLASSIC_MAINNET_NETWORK",
+            "hash": "0xb6b719ee07770d2a527de01b0083d8bb85a9c7a63789282fe3bcddb920a946f9",
+            "timestamp": "2020-07-02T06:29:13.265Z",
+            "prev_hash": "db709ce7861d98746a0893442ca669993bbcadb76e4188ab0307da0df44cbe2d0684608432ad4d1251305e48d0feef37d6195334266533b511fcdd6315404839"
+          }
+        }     
+      ]
+  }

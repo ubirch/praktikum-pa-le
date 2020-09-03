@@ -64,3 +64,19 @@ export interface IUbirchVerificationEnvConfig {
   console_verify_url: string;
   asset_url_prefix: string;
 }
+
+export interface IUbirchVerificationFormData {
+  
+  
+    b: number;
+    d: number; 
+    f: string,
+    g: string,
+    i: string,
+    p: string,
+    r: string,
+    s: string,
+    t: string
+   
+  
+}

@@ -1,5 +1,4 @@
 <div class="container">
-
   <h1>Ubirch Verification</h1>
   <div>
     <form [formGroup]="form">
@@ -79,17 +78,22 @@
 
       <button (click)="verifyClick()" [disabled]="!form.valid"
               class="btn btn-primary"
-              type="submit">verify
+              type="submit" id="verifyButton">verify
+      </button>
+      <button (click)="fillTestData()" 
+              class="btn btn-primary"
+              type="submit"
+              style="margin-left: 5px;">testData
       </button>
 
     </form>
 
     <hr *ngIf="responseInfo">
 
-    <div class="container">
+    <div class="container" *ngIf="responseInfo">
 
-      <a *ngIf="seal.src" href="{{seal.href}}">
-        <img alt="UbirchSeal" height="64px" src="{{seal.src}}" width="64px">
+      <a  href="{{seal.href}}">
+        <img alt="UbirchSeal" height="64px" src="{{seal.src}}" width="64px" id="UbirchSeal">
       </a>
 
       <a *ngFor="let anchor of anchors" href="{{anchor.href}}">

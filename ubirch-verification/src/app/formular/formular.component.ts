@@ -8,11 +8,12 @@ import {
   IUbirchblockchain,
   IUbirchBlockchainNet,
   IUbirchResponse,
-  IUbirchSeal
+  IUbirchSeal, IUbirchVerificationFormData
 } from '../models';
 import {VerificationStates} from '../verification-states.enum';
 import BlockchainSettings from '../../assets/blockchain-settings.json';
 import VerificationConfig from '../../assets/Verification-comfig.json';
+import TestData from '../../assets/test-data.json'
 
 
 @Component({
@@ -69,23 +70,31 @@ export class FormularComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
     this.form = this.formbuilder.group({
-      b: ['19640812', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
-      d: ['202007011030', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
-      f: ['Mustermann', [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
-      g: ['Erika', [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
-      i: ['3CF75K8D0L', Validators.required],
-      p: ['T01000322', Validators.required],
-      r: ['n', [Validators.required, Validators.pattern('x|n|p')]],
-      s: ['2fe00c151cb726bb9ed7', Validators.required],
-      t: ['PCR', Validators.required]
+      b: [null, [Validators.required, Validators.pattern(/^[0-9]*$/), Validators.maxLength(8), Validators.minLength(8)]],
+      d: [null, [Validators.required, Validators.pattern(/^[0-9]*$/), Validators.maxLength(12), Validators.minLength(12)]],
+      f: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/), Validators.maxLength(50)]],
+      g: [null, [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/), Validators.maxLength(50)]],
+      i: [null, Validators.required],
+      p: [null, [Validators.required, Validators.maxLength(9)]],
+      r: [null, [Validators.required, Validators.pattern('x|n|p')]],
+      s: [null, Validators.required],
+      t: [null, Validators.required]
     });
 
     this.seal = {href: '', src: ''};
+    if(window.location.href.includes('?')){
+      this.fillFromQuery()
+    }
+    
+    if(window.location.href.includes('#')){
+      this.fillFromFragment()
+    }
+    
   }
 
   verifyClick(): void {
-    this.anchors = [];
     this.verificationService.verify(this.form.value).subscribe(
       response => {
         const responseCode = this.checkResponse(response.body);
@@ -101,6 +110,7 @@ export class FormularComponent implements OnInit {
   }
 
   checkResponse(response: IUbirchResponse): number {
+    console.log('response ' + response);
     if (!response) {
       // error 'Verification failed empty response'
       return VerificationStates.Empty_Response;
@@ -114,7 +124,7 @@ export class FormularComponent implements OnInit {
     }
 
     const seal = responseObj.upp;
-    console.log(seal);
+    console.log('seal ' + seal);
 
     if (!seal || !seal.length) {
       // error 'Verification failed missing seal in response'
@@ -138,7 +148,7 @@ export class FormularComponent implements OnInit {
         console.log('post show anchors: ' + this.anchors);
       }
     });
-
+    console.log('verification successfull')
     return VerificationStates.Verification_successful;
   }
 
@@ -245,5 +255,66 @@ export class FormularComponent implements OnInit {
       anchor.icon = VerificationConfig.assets_url_prefix + blox.nodeIcon.split('/')[2];
     }
     this.anchors.push(anchor);
+  }
+
+  fillTestData(): void {
+    this.fName.setValue(TestData.f);
+    this.gName.setValue(TestData.g);
+    this.idNumber.setValue(TestData.p);
+    this.ranNum.setValue(TestData.s);
+    this.testDateTime.setValue(TestData.d);
+    this.testResult.setValue(TestData.r);
+    this.testType.setValue(TestData.t);
+    this.birthDate.setValue(TestData.b);
+    this.labId.setValue(TestData.i);
+  }
+
+  fillFromQuery(): void {
+    const Url = window.location.href;
+    let query = Url.split('?')[1].split('&');
+    let UrlData = [];
+    let fillData: IUbirchVerificationFormData
+    
+    for(let i in query){
+      let item = query[i].split('=');
+      console.log(item);
+      UrlData.push(item[1]);
+    }
+    console.log(UrlData);
+    
+    this.fName.setValue(UrlData[0]);
+    this.gName.setValue(UrlData[1]);
+    this.birthDate.setValue(UrlData[2]);
+    this.idNumber.setValue(UrlData[3]);
+    this.labId.setValue(UrlData[4]);
+    this.testDateTime.setValue(UrlData[5]);
+    this.testType.setValue(UrlData[6]);
+    this.testResult.setValue(UrlData[7]);
+    this.ranNum.setValue(UrlData[8]);
+  }
+
+  fillFromFragment(): void {
+    const Url = window.location.href;
+    console.log(Url)
+    let query = Url.split('#')[1].split(';');
+    let UrlData = [];
+    let fillData: IUbirchVerificationFormData
+    
+    for(let i in query){
+      let item = query[i].split('=');
+      console.log(item);
+      UrlData.push(item[1]);
+    }
+    console.log(UrlData);
+    
+    this.fName.setValue(UrlData[0]);
+    this.gName.setValue(UrlData[1]);
+    this.birthDate.setValue(UrlData[2]);
+    this.idNumber.setValue(UrlData[3]);
+    this.labId.setValue(UrlData[4]);
+    this.testDateTime.setValue(UrlData[5]);
+    this.testType.setValue(UrlData[6]);
+    this.testResult.setValue(UrlData[7]);
+    this.ranNum.setValue(UrlData[8]);
   }
 }
