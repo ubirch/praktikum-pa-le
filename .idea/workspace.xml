@@ -19,17 +19,14 @@
     <select>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:feature" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/feature" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dfcba95e-d109-4933-ad35-88c69d75fa37" name="Default Changelist" comment="made URLs config">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/ubirch-verification/src/app/formular/formular.component.html" afterDir="false" />
-    </list>
+    <list default="true" id="dfcba95e-d109-4933-ad35-88c69d75fa37" name="Default Changelist" comment="made URLs config" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -55,7 +52,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/ubirch-verification" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
@@ -234,9 +231,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="128" y="236" key="#Notifications/0.0.1536.824@0.0.1536.824" timestamp="1597317270488" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1596201093992">
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1598716933359">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824/1920.0.1536.824@0.0.1536.824" timestamp="1598716933359" />
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1596201093992" />
     <state x="618" y="326" key="VCS.ChangelistChooser" timestamp="1596631057411">
       <screen x="0" y="0" width="1536" height="824" />

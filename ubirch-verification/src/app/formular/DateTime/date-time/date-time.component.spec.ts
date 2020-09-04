@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DateTimeComponent } from './date-time.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 describe('DateTimeComponent', () => {
   let component: DateTimeComponent;
@@ -8,6 +10,7 @@ describe('DateTimeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [],
       declarations: [ DateTimeComponent ]
     })
     .compileComponents();
