@@ -28,6 +28,7 @@ export class FormularComponent implements OnInit {
   responseInfo: IResponseInfo;
   seal: IUbirchSeal;
   anchors = [];
+  Url: string;
 
 
   constructor(private formbuilder: FormBuilder, private verificationService: VerificationService) {
@@ -84,17 +85,15 @@ export class FormularComponent implements OnInit {
     });
 
     this.seal = {href: '', src: ''};
-    if(window.location.href.includes('?')){
-      this.fillFromQuery()
-    }
+    this.Url = window.location.href
     
-    if(window.location.href.includes('#')){
-      this.fillFromFragment()
-    }
+    this.fillFromUrl()
+    
     
   }
 
   verifyClick(): void {
+    this.anchors = [];
     this.verificationService.verify(this.form.value).subscribe(
       response => {
         const responseCode = this.checkResponse(response.body);
@@ -110,7 +109,6 @@ export class FormularComponent implements OnInit {
   }
 
   checkResponse(response: IUbirchResponse): number {
-    console.log('response ' + response);
     if (!response) {
       // error 'Verification failed empty response'
       return VerificationStates.Empty_Response;
@@ -124,7 +122,6 @@ export class FormularComponent implements OnInit {
     }
 
     const seal = responseObj.upp;
-    console.log('seal ' + seal);
 
     if (!seal || !seal.length) {
       // error 'Verification failed missing seal in response'
@@ -143,9 +140,10 @@ export class FormularComponent implements OnInit {
       if (!item || !item.properties) {
         return;
       } else {
-        console.log('pre show anchors: ' + this.anchors);
+        
         this.showBloxTXIcon(item.properties);
-        console.log('post show anchors: ' + this.anchors);
+        
+
       }
     });
     console.log('verification successfull')
@@ -219,22 +217,21 @@ export class FormularComponent implements OnInit {
   }
 
   showBloxTXIcon(bloxTX: IUbirchAnchorProperties): void {
-    console.log('bloxTX = ' + bloxTX);
     if (!bloxTX) {
       return;
     }
 
     const blockchain: string = bloxTX.blockchain;
-    console.log('blockchain = ' + blockchain);
+   
     const networkType: string = bloxTX.network_type;
-    console.log('networktype = ' + networkType);
+    
 
     if (!blockchain || !networkType) {
       return;
     }
 
     const blox: IUbirchblockchain = BlockchainSettings[blockchain];
-    console.log('blox = ' + blox);
+   
 
     if (!blox || !bloxTX.txid) {
       return;
@@ -251,7 +248,7 @@ export class FormularComponent implements OnInit {
     anchor.target = '_blanc';
 
     if (blox.nodeIcon) {
-      console.log('nodeIcon = ' + blox.nodeIcon);
+     
       anchor.icon = VerificationConfig.assets_url_prefix + blox.nodeIcon.split('/')[2];
     }
     this.anchors.push(anchor);
@@ -269,43 +266,22 @@ export class FormularComponent implements OnInit {
     this.labId.setValue(TestData.i);
   }
 
-  fillFromQuery(): void {
-    const Url = window.location.href;
-    let query = Url.split('?')[1].split('&');
-    let UrlData = [];
-    let fillData: IUbirchVerificationFormData
+  fillFromUrl(): void {
+    const Url = this.Url;
+    let query: string[];
+    let UrlData: string[] = [];
     
+    if(Url.includes('/v/?')){
+       query = Url.split('?')[1].split('&');;
+    }else if(Url.includes('/v/#')){
+       query = Url.split('#')[1].split(';');;
+     }else{
+       return;
+     }    
     for(let i in query){
       let item = query[i].split('=');
-      console.log(item);
       UrlData.push(item[1]);
-    }
-    console.log(UrlData);
-    
-    this.fName.setValue(UrlData[0]);
-    this.gName.setValue(UrlData[1]);
-    this.birthDate.setValue(UrlData[2]);
-    this.idNumber.setValue(UrlData[3]);
-    this.labId.setValue(UrlData[4]);
-    this.testDateTime.setValue(UrlData[5]);
-    this.testType.setValue(UrlData[6]);
-    this.testResult.setValue(UrlData[7]);
-    this.ranNum.setValue(UrlData[8]);
-  }
-
-  fillFromFragment(): void {
-    const Url = window.location.href;
-    console.log(Url)
-    let query = Url.split('#')[1].split(';');
-    let UrlData = [];
-    let fillData: IUbirchVerificationFormData
-    
-    for(let i in query){
-      let item = query[i].split('=');
-      console.log(item);
-      UrlData.push(item[1]);
-    }
-    console.log(UrlData);
+    }    
     
     this.fName.setValue(UrlData[0]);
     this.gName.setValue(UrlData[1]);

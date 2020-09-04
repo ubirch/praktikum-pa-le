@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import { FormularComponent } from './formular.component';
 import { FormsModule, ReactiveFormsModule, NG_VALUE_ACCESSOR, CheckboxControlValueAccessor } from '@angular/forms';
@@ -7,8 +7,6 @@ import { VerificationService } from '../verification.service';
 import { DateTimeComponent } from './DateTime/date-time/date-time.component';
 import TestData from '../../assets/test-data.json'
 import responseData from '../../assets/response-test-data.json'
-import { format } from 'path';
-import { timeout } from 'rxjs/operators';
 
 describe('FormularComponent', () => {
   let component: FormularComponent;
@@ -278,5 +276,52 @@ describe('FormularComponent', () => {
     expect(fixture.nativeElement.querySelector('#UbirchSeal').src).toContain("ubirch_verify_wrong.png")
     
     })
+
+  it('should properly load data from a query', () => {
+    component.Url = 'http://localhost:4200/v/?f=Mustermann&g=Erika&b=19640812&p=T01000322&i=3CF75K8D0L&d=202007011030&t=PCR&r=n&s=2fe00c151cb726bb9ed7'
+    component.fillFromUrl();
+    fixture.detectChanges;
+    expect(component.form.valid).toBeTrue();
+    expect(component.fName.value).toEqual('Mustermann');
+    expect(component.gName.value).toEqual('Erika');
+    expect(component.birthDate.value).toEqual('19640812');
+    expect(component.idNumber.value).toEqual('T01000322');
+    expect(component.labId.value).toEqual('3CF75K8D0L');
+    expect(component.testDateTime.value).toEqual('202007011030');
+    expect(component.testType.value).toEqual('PCR');
+    expect(component.testResult.value).toEqual('n');
+    expect(component.ranNum.value).toEqual('2fe00c151cb726bb9ed7');
+  })
+
+  it('should properly load data from a fragment', () => {
+    component.Url = 'http://localhost:4200/v/#f=Mustermann;g=Erika;b=19640812;p=T01000322;i=3CF75K8D0L;d=202007011030;t=PCR;r=n;s=2fe00c151cb726bb9ed7'
+    component.fillFromUrl();
+    fixture.detectChanges;
+    expect(component.form.valid).toBeTrue();
+    expect(component.fName.value).toEqual('Mustermann');
+    expect(component.gName.value).toEqual('Erika');
+    expect(component.birthDate.value).toEqual('19640812');
+    expect(component.idNumber.value).toEqual('T01000322');
+    expect(component.labId.value).toEqual('3CF75K8D0L');
+    expect(component.testDateTime.value).toEqual('202007011030');
+    expect(component.testType.value).toEqual('PCR');
+    expect(component.testResult.value).toEqual('n');
+    expect(component.ranNum.value).toEqual('2fe00c151cb726bb9ed7');
+  })
+
+  it('should be an empty form without params', () => {
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.form.valid).toEqual(false);
+    expect(component.fName.value).toEqual(null);
+    expect(component.gName.value).toEqual(null);
+    expect(component.birthDate.value).toEqual(null);
+    expect(component.idNumber.value).toEqual(null);
+    expect(component.labId.value).toEqual(null);
+    expect(component.testDateTime.value).toEqual(null);
+    expect(component.testType.value).toEqual(null);
+    expect(component.testResult.value).toEqual(null);
+    expect(component.ranNum.value).toEqual(null);
+  })
   
 });
