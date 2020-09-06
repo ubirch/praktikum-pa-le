@@ -8,6 +8,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from "@angular/common/http";
 import { DateTimeComponent } from './formular/DateTime/date-time/date-time.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +20,7 @@ import { DateTimeComponent } from './formular/DateTime/date-time/date-time.compo
         AppRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-      HttpClientModule
+        HttpClientModule,
     ],
   providers: [],
   bootstrap: [AppComponent]

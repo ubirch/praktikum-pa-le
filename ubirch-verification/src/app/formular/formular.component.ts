@@ -29,6 +29,7 @@ export class FormularComponent implements OnInit {
   seal: IUbirchSeal;
   anchors = [];
   Url: string;
+  showToast: boolean = false;
 
 
   constructor(private formbuilder: FormBuilder, private verificationService: VerificationService) {
@@ -83,7 +84,7 @@ export class FormularComponent implements OnInit {
       s: [null, Validators.required],
       t: [null, Validators.required]
     });
-
+    this.responseInfo = { type: '', header: '', info: ''}
     this.seal = {href: '', src: ''};
     this.Url = window.location.href
     
@@ -96,12 +97,14 @@ export class FormularComponent implements OnInit {
     this.anchors = [];
     this.verificationService.verify(this.form.value).subscribe(
       response => {
+        console.log(response)
         const responseCode = this.checkResponse(response.body);
         this.handleResponse(responseCode);
         this.showSeal(responseCode, this.verificationService.hash);
         console.log('verification finished');
       },
       error => {
+        console.log(error);
         const responseCode = this.handleError(error);
         this.showSeal(responseCode, this.verificationService.hash);
       }
@@ -194,12 +197,21 @@ export class FormularComponent implements OnInit {
         info: 'Es konnte kein Zertifikat gefunden werden'
       };
       return VerificationStates.Zertificate_not_found;
+    } else if(error.status >= 500 && error.status < 600){
+      this.responseInfo = {
+        type: 'errorT',
+        header: 'Fehler',
+        info: 'Es ist ein interner Server Fehler aufgetreten. Bitte versuchen sie es später erneut.'
+      };
+      this.toastTimeout();
+      return VerificationStates.Internal_Error;
     } else {
       this.responseInfo = {
-        type: 'error',
+        type: 'errorT',
         header: 'Fehler',
-        info: 'Es ist ein unerwarteter Fehler aufgetreten'
+        info: 'Es ist ein unerwarteter Fehler aufgetreten. Bitte versuchen sie es später erneut.'
       };
+      this.toastTimeout();
       return VerificationStates.Unknown_Error;
     }
   }
@@ -292,5 +304,12 @@ export class FormularComponent implements OnInit {
     this.testType.setValue(UrlData[6]);
     this.testResult.setValue(UrlData[7]);
     this.ranNum.setValue(UrlData[8]);
+  }
+
+  toastTimeout(){
+    this.showToast = true;
+    setTimeout(function() { 
+      this.showToast = false;
+  }.bind(this), 5000);
   }
 }
