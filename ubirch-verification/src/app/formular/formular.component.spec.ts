@@ -181,7 +181,7 @@ describe('FormularComponent', () => {
     expect(component.form.valid).toBeTrue();
     expect(verifyButton.disabled).toBeFalse();
 
-    component.birthDate.setValue(5-10-1998)
+    component.birthDate.setValue("5-10-1998")
     fixture.detectChanges();
     expect(component.birthDate.valid).toBeFalse();
     expect(component.form.valid).toBeFalse();
@@ -276,6 +276,31 @@ describe('FormularComponent', () => {
     expect(fixture.nativeElement.querySelector('#UbirchSeal').src).toContain("ubirch_verify_wrong.png")
     
     })
+
+  it('should properly handly errors with a 500 status', () => {
+    const error = {status: 500};
+    component.handleError(error);
+    fixture.detectChanges();
+    expect(component.responseInfo).toEqual({
+      type: 'errorT',
+      header: 'Fehler',
+      info: 'Es ist ein interner Server Fehler aufgetreten. Bitte versuchen sie es später erneut.'
+    });
+    expect(fixture.nativeElement.querySelector('#toast')).toBeTruthy();
+  })
+
+  it('should properly handle other unexpected errors', () => {
+    const error = {status: 400};
+
+    component.handleError(error);
+    fixture.detectChanges();
+    expect(component.responseInfo).toEqual({
+      type: 'errorT',
+      header: 'Fehler',
+      info: 'Es ist ein unerwarteter Fehler aufgetreten. Bitte versuchen sie es später erneut.'
+    });
+    expect(fixture.nativeElement.querySelector('#toast')).toBeTruthy();
+  })
 
   it('should properly load data from a query', () => {
     component.Url = 'http://localhost:4200/v/?f=Mustermann&g=Erika&b=19640812&p=T01000322&i=3CF75K8D0L&d=202007011030&t=PCR&r=n&s=2fe00c151cb726bb9ed7'

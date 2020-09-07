@@ -194,7 +194,7 @@ export class FormularComponent implements OnInit {
       this.responseInfo = {
         type: 'error',
         header: 'Verifikation fehlgeschlagen',
-        info: 'Es konnte kein Zertifikat gefunden werden'
+        info: 'Es konnte kein Zertifikat gefunden werden.'
       };
       return VerificationStates.Zertificate_not_found;
     } else if(error.status >= 500 && error.status < 600){

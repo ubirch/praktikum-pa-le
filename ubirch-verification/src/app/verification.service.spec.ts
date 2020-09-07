@@ -29,9 +29,11 @@ describe('VerificationService', () => {
     service.verify(testData)
     expect(service.json).toBeTruthy();
     expect(service.hash).toBeTruthy();
+    expect(service.json).toEqual('{"b":"19640812","d":"202007011030","f":"Mustermann","g":"Erika","i":"3CF75K8D0L","p":"T01000322","r":"n","s":"2fe00c151cb726bb9ed7","t":"PCR"}');
+    expect(service.hash).toEqual('1ENYKuJyh2ab/a7ozIyEHLFdVX+ERFIKjU5GRjgTaI4=')
   })
 
-  it('should get the correct data on a successfull call, with testdata', () => {
+  it('should get the data on a successfull call', () => {
     service.verify(testData).subscribe((data: any) => {
       expect(data.body).toBe(responseData);
     });
@@ -52,4 +54,8 @@ describe('VerificationService', () => {
     req.error(null, responseDataWrong);
     httpMock.verify();
   })
+
+  afterEach(() => {
+    httpMock.verify();
+  });
 });

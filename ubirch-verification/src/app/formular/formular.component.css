@@ -33,14 +33,13 @@
   clear: both;
 }
 
-#overlay {
-  position: fixed; /* Sit on top of the page content */
-  width: 400px; /* Full width (cover the whole page) */
-  height: 100px; /* Full height (cover the whole page) */
+#toast {
+  position: fixed; 
+  width: 400px;
+  height: 100px; 
   top: 5%;
   right: 5%;
-  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
-  cursor: pointer; /* Add a pointer on hover */
+  z-index: 2;
   display: "block";
   opacity: 0.7;
 }
