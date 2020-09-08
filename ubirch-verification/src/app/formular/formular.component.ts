@@ -33,7 +33,7 @@ export class FormularComponent implements OnInit {
   showToast: boolean = false;
 
 
-  constructor(private formbuilder: FormBuilder, private verificationService: VerificationService) {
+  constructor(private formbuilder: FormBuilder, private verificationService: VerificationService, private route: ActivatedRoute) {
   }
 
   get fName(): AbstractControl {
@@ -89,9 +89,17 @@ export class FormularComponent implements OnInit {
     this.seal = {href: '', src: ''};
     this.Url = window.location.href
     
-   this.fillFromUrl()
+    this.route.queryParams.subscribe(params => {
+      if(params){
+        this.fillFromUrl(params);
+      }
+    });
     
-    
+    this.route.fragment.subscribe(params => {
+      if(params){
+        this.fillFromUrl(params);
+      }
+    })    
   }
 
   verifyClick(): void {
@@ -195,6 +203,7 @@ export class FormularComponent implements OnInit {
         header: 'Verifikation fehlgeschlagen',
         info: 'Es konnte kein Zertifikat gefunden werden.'
       };
+      this.toastTimeout();
       return VerificationStates.Zertificate_not_found;
     } else if(error.status >= 500 && error.status < 600){
       this.responseInfo = {
@@ -277,56 +286,16 @@ export class FormularComponent implements OnInit {
     this.labId.setValue(TestData.i);
   }
 
-  fillFromUrl(): void {
-    const Url = this.Url;
-    let query: string[];
-    let queryitems: string[] = [];
-    
-    if(Url.includes('/v?')){
-       query = Url.split('?')[1].split('&');;
-    }else if(Url.includes('/v#')){
-       query = Url.split('#')[1].split(';');;
-     }else{
-       return;
-     }  
-
-    for(let i in query){
-      let item = query[i]
-      queryitems.push(item);
-    }    
-
-    for(let j in queryitems){
-      let item = queryitems[j].split('=')
-      switch(item[0]) {
-        case 'f':{
-          this.fName.setValue(item[1]);
-        }
-        case 'g':{
-          this.gName.setValue(item[1]);
-        }
-        case 'b':{
-          this.birthDate.setValue(item[1]);
-        }
-        case 'p':{
-          this.idNumber.setValue(item[1]);
-        }
-        case 'i':{
-          this.labId.setValue(item[1]);
-        }
-        case 'd':{
-          this.testDateTime.setValue(item[1]);
-        }
-        case 't':{
-          this.testType.setValue(item[1]);
-        }
-        case 'r':{
-          this.testResult.setValue(item[1]);
-        }
-        case 's':{
-          this.ranNum.setValue(item[1]);
-        }
-      } 
-    }    
+  fillFromUrl(params): void { 
+    this.fName.setValue(params.f);
+    this.gName.setValue(params.g);
+    this.idNumber.setValue(params.p);
+    this.ranNum.setValue(params.s);
+    this.testDateTime.setValue(params.d);
+    this.testResult.setValue(params.r);
+    this.testType.setValue(params.t);
+    this.birthDate.setValue(params.b);
+    this.labId.setValue(params.i);  
   }
 
   toastTimeout(){

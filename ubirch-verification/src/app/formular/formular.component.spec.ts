@@ -361,7 +361,7 @@ describe('FormularComponent', () => {
 
   it('should properly load data from a query', () => {
     component.Url = 'http://localhost:4200/v?f=Mustermann&g=Erika&b=19640812&p=T01000322&i=3CF75K8D0L&d=202007011030&t=PCR&r=n&s=2fe00c151cb726bb9ed7'
-    component.fillFromUrl();
+    component.ngOnInit();
     fixture.detectChanges;
     expect(component.form.valid).toBeTrue();
     expect(component.fName.value).toEqual('Mustermann');
@@ -377,7 +377,7 @@ describe('FormularComponent', () => {
 
   it('should properly load data from a fragment', () => {
     component.Url = 'http://localhost:4200/v#f=Mustermann;g=Erika;b=19640812;p=T01000322;i=3CF75K8D0L;d=202007011030;t=PCR;r=n;s=2fe00c151cb726bb9ed7'
-    component.fillFromUrl();
+    component.ngOnInit();
     fixture.detectChanges;
     expect(component.form.valid).toBeTrue();
     expect(component.fName.value).toEqual('Mustermann');
