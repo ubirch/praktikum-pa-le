@@ -14,6 +14,7 @@ import {VerificationStates} from '../verification-states.enum';
 import BlockchainSettings from '../../assets/blockchain-settings.json';
 import VerificationConfig from '../../assets/Verification-comfig.json';
 import TestData from '../../assets/test-data.json'
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -88,7 +89,7 @@ export class FormularComponent implements OnInit {
     this.seal = {href: '', src: ''};
     this.Url = window.location.href
     
-    this.fillFromUrl()
+   this.fillFromUrl()
     
     
   }
@@ -143,12 +144,10 @@ export class FormularComponent implements OnInit {
       if (!item || !item.properties) {
         return;
       } else {
-        
         this.showBloxTXIcon(item.properties);
-        
-
       }
     });
+    
     console.log('verification successfull')
     return VerificationStates.Verification_successful;
   }
@@ -281,29 +280,53 @@ export class FormularComponent implements OnInit {
   fillFromUrl(): void {
     const Url = this.Url;
     let query: string[];
-    let UrlData: string[] = [];
+    let queryitems: string[] = [];
     
-    if(Url.includes('/v/?')){
+    if(Url.includes('/v?')){
        query = Url.split('?')[1].split('&');;
-    }else if(Url.includes('/v/#')){
+    }else if(Url.includes('/v#')){
        query = Url.split('#')[1].split(';');;
      }else{
        return;
-     }    
+     }  
+
     for(let i in query){
-      let item = query[i].split('=');
-      UrlData.push(item[1]);
+      let item = query[i]
+      queryitems.push(item);
     }    
-    
-    this.fName.setValue(UrlData[0]);
-    this.gName.setValue(UrlData[1]);
-    this.birthDate.setValue(UrlData[2]);
-    this.idNumber.setValue(UrlData[3]);
-    this.labId.setValue(UrlData[4]);
-    this.testDateTime.setValue(UrlData[5]);
-    this.testType.setValue(UrlData[6]);
-    this.testResult.setValue(UrlData[7]);
-    this.ranNum.setValue(UrlData[8]);
+
+    for(let j in queryitems){
+      let item = queryitems[j].split('=')
+      switch(item[0]) {
+        case 'f':{
+          this.fName.setValue(item[1]);
+        }
+        case 'g':{
+          this.gName.setValue(item[1]);
+        }
+        case 'b':{
+          this.birthDate.setValue(item[1]);
+        }
+        case 'p':{
+          this.idNumber.setValue(item[1]);
+        }
+        case 'i':{
+          this.labId.setValue(item[1]);
+        }
+        case 'd':{
+          this.testDateTime.setValue(item[1]);
+        }
+        case 't':{
+          this.testType.setValue(item[1]);
+        }
+        case 'r':{
+          this.testResult.setValue(item[1]);
+        }
+        case 's':{
+          this.ranNum.setValue(item[1]);
+        }
+      } 
+    }    
   }
 
   toastTimeout(){
