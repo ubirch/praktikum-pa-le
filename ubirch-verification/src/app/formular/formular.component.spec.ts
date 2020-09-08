@@ -45,6 +45,63 @@ describe('FormularComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should properly snyc the entered Values with the Formcontrol Values', () => {
+    let gName = fixture.nativeElement.querySelector('#gName');
+    gName.value = 'Erika';
+    gName.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(gName.value).toEqual('Erika');
+    expect(component.gName.value).toEqual('Erika');
+
+    let fName = fixture.nativeElement.querySelector('#fName');
+    fName.value = 'Mustermann';
+    fName.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    fixture.whenStable();
+    expect(fName.value).toEqual('Mustermann');
+    expect(component.fName.value).toEqual('Mustermann');
+
+    let idNumber = fixture.nativeElement.querySelector('#idNumber');
+    idNumber.value = '123456789';
+    idNumber.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    fixture.whenStable();
+    expect(idNumber.value).toEqual('123456789');
+    expect(component.idNumber.value).toEqual('123456789');
+
+    let ranNum = fixture.nativeElement.querySelector('#ranNum');
+    ranNum.value = '123';
+    ranNum.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    fixture.whenStable();
+    expect(ranNum.value).toEqual('123');
+    expect(component.ranNum.value).toEqual('123');
+
+    let testResult = fixture.nativeElement.querySelector('#testResult');
+    testResult.value = 'p';
+    testResult.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    fixture.whenStable();
+    expect(testResult.value).toEqual('p');
+    expect(component.testResult.value).toEqual('p');
+
+    let testType = fixture.nativeElement.querySelector('#testType');
+    testType.value = 'PCR';
+    testType.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    fixture.whenStable();
+    expect(testType.value).toEqual('PCR');
+    expect(component.testType.value).toEqual('PCR'); 
+    
+    let labId = fixture.nativeElement.querySelector('#labId');
+    labId.value = 'lab1';
+    labId.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    fixture.whenStable();
+    expect(labId.value).toEqual('lab1');
+    expect(component.labId.value).toEqual('lab1');
+  })
+
   it('should be a valid form after test data is pasted, meaning all fields are correctly filled', ()  => {
     expect(component.form.valid).toBe(false);
     component.fillTestData();
@@ -181,7 +238,7 @@ describe('FormularComponent', () => {
     expect(component.form.valid).toBeTrue();
     expect(verifyButton.disabled).toBeFalse();
 
-    component.birthDate.setValue(5-10-1998)
+    component.birthDate.setValue("5-10-1998")
     fixture.detectChanges();
     expect(component.birthDate.valid).toBeFalse();
     expect(component.form.valid).toBeFalse();
@@ -277,8 +334,33 @@ describe('FormularComponent', () => {
     
     })
 
+  it('should properly handly errors with a 500 status', () => {
+    const error = {status: 500};
+    component.handleError(error);
+    fixture.detectChanges();
+    expect(component.responseInfo).toEqual({
+      type: 'errorT',
+      header: 'Fehler',
+      info: 'Es ist ein interner Server Fehler aufgetreten. Bitte versuchen sie es später erneut.'
+    });
+    expect(fixture.nativeElement.querySelector('#toast')).toBeTruthy();
+  })
+
+  it('should properly handle other unexpected errors', () => {
+    const error = {status: 400};
+
+    component.handleError(error);
+    fixture.detectChanges();
+    expect(component.responseInfo).toEqual({
+      type: 'errorT',
+      header: 'Fehler',
+      info: 'Es ist ein unerwarteter Fehler aufgetreten. Bitte versuchen sie es später erneut.'
+    });
+    expect(fixture.nativeElement.querySelector('#toast')).toBeTruthy();
+  })
+
   it('should properly load data from a query', () => {
-    component.Url = 'http://localhost:4200/v/?f=Mustermann&g=Erika&b=19640812&p=T01000322&i=3CF75K8D0L&d=202007011030&t=PCR&r=n&s=2fe00c151cb726bb9ed7'
+    component.Url = 'http://localhost:4200/v?f=Mustermann&g=Erika&b=19640812&p=T01000322&i=3CF75K8D0L&d=202007011030&t=PCR&r=n&s=2fe00c151cb726bb9ed7'
     component.fillFromUrl();
     fixture.detectChanges;
     expect(component.form.valid).toBeTrue();
@@ -294,7 +376,7 @@ describe('FormularComponent', () => {
   })
 
   it('should properly load data from a fragment', () => {
-    component.Url = 'http://localhost:4200/v/#f=Mustermann;g=Erika;b=19640812;p=T01000322;i=3CF75K8D0L;d=202007011030;t=PCR;r=n;s=2fe00c151cb726bb9ed7'
+    component.Url = 'http://localhost:4200/v#f=Mustermann;g=Erika;b=19640812;p=T01000322;i=3CF75K8D0L;d=202007011030;t=PCR;r=n;s=2fe00c151cb726bb9ed7'
     component.fillFromUrl();
     fixture.detectChanges;
     expect(component.form.valid).toBeTrue();

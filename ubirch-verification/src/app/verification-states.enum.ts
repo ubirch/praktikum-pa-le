@@ -6,5 +6,6 @@ export enum VerificationStates {
   Achors_not_found,
   Verification_successful,
   Empty_Response,
-  Unknown_Error
+  Unknown_Error,
+  Internal_Error
 }

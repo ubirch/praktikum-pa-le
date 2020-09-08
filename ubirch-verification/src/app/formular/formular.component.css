@@ -33,5 +33,16 @@
   clear: both;
 }
 
+#toast {
+  position: fixed; 
+  width: 400px;
+  height: 100px; 
+  top: 5%;
+  right: 5%;
+  z-index: 2;
+  display: "block";
+  opacity: 0.7;
+}
+
 
 

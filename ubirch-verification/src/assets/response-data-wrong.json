@@ -1,0 +1,8 @@
+{
+
+"message": "Http failure response for https://verify.prod.ubirch.com/api/upp/verify/anchor?blockchain_info=ext: 404 OK",
+"status": 404,
+"statusText": "OK",
+"url": "https://verify.prod.ubirch.com/api/upp/verify/anchor?blockchain_info=ext"
+
+}

@@ -2,9 +2,6 @@ import {Injectable} from '@angular/core';
 import {sha256} from 'js-sha256/src/sha256.js';
 import {sha512} from 'js-sha512';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {catchError, retry} from 'rxjs/operators';
-import {IUbirchResponse} from './models';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +25,7 @@ export class VerificationService {
         'Content-Type': 'text/plain'
       }),
     };
+
     return this.http.post(this.verificationApiUrl, hash, {observe: 'response'});
   }
 
