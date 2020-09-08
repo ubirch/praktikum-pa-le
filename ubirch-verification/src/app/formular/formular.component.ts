@@ -36,7 +36,7 @@ export class FormularComponent implements OnInit {
 
   private routeQueryParamsSubscription = this.route.queryParams
     .pipe(
-      switchMap((query: { f: string, g: string, b: string, p: string, i: string, d: string, t: string, r: string, s: string }) => {
+      switchMap((query: any) => {
         return of(this.fillFormWithParams(
           Object.keys(query).map(
             param => param + '=' + query[param])));
