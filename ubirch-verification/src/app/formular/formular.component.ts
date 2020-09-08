@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import {VerificationService} from '../verification.service';
 import {
   IResponseInfo,
@@ -32,8 +34,15 @@ export class FormularComponent implements OnInit {
   Url: string;
   showToast: boolean = false;
 
-
-  constructor(private formbuilder: FormBuilder, private verificationService: VerificationService) {
+  private routeQueryParamsSubscription = this.route.queryParams
+    .pipe(
+      switchMap((query: { f: string, g: string, b: string, p: string, i: string, d: string, t: string, r: string, s: string }) => {
+        return of(this.fillFormWithParams(
+          Object.keys(query).map(
+            param => param + '=' + query[param])));
+      })
+    ).subscribe();
+  constructor(private formbuilder: FormBuilder, private verificationService: VerificationService, private route: ActivatedRoute) {
   }
 
   get fName(): AbstractControl {
@@ -73,7 +82,7 @@ export class FormularComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
     this.form = this.formbuilder.group({
       b: [null, [Validators.required, Validators.pattern(/^[0-9]*$/), Validators.maxLength(8), Validators.minLength(8)]],
       d: [null, [Validators.required, Validators.pattern(/^[0-9]*$/), Validators.maxLength(12), Validators.minLength(12)]],
@@ -88,10 +97,10 @@ export class FormularComponent implements OnInit {
     this.responseInfo = { type: '', header: '', info: ''}
     this.seal = {href: '', src: ''};
     this.Url = window.location.href
-    
+
    this.fillFromUrl()
-    
-    
+
+
   }
 
   verifyClick(): void {
@@ -147,7 +156,7 @@ export class FormularComponent implements OnInit {
         this.showBloxTXIcon(item.properties);
       }
     });
-    
+
     console.log('verification successfull')
     return VerificationStates.Verification_successful;
   }
@@ -233,16 +242,16 @@ export class FormularComponent implements OnInit {
     }
 
     const blockchain: string = bloxTX.blockchain;
-   
+
     const networkType: string = bloxTX.network_type;
-    
+
 
     if (!blockchain || !networkType) {
       return;
     }
 
     const blox: IUbirchblockchain = BlockchainSettings[blockchain];
-   
+
 
     if (!blox || !bloxTX.txid) {
       return;
@@ -259,7 +268,7 @@ export class FormularComponent implements OnInit {
     anchor.target = '_blanc';
 
     if (blox.nodeIcon) {
-     
+
       anchor.icon = VerificationConfig.assets_url_prefix + blox.nodeIcon.split('/')[2];
     }
     this.anchors.push(anchor);
@@ -280,20 +289,27 @@ export class FormularComponent implements OnInit {
   fillFromUrl(): void {
     const Url = this.Url;
     let query: string[];
-    let queryitems: string[] = [];
-    
-    if(Url.includes('/v?')){
-       query = Url.split('?')[1].split('&');;
-    }else if(Url.includes('/v#')){
-       query = Url.split('#')[1].split(';');;
-     }else{
-       return;
-     }  
+    const queryitems: string[] = [];
 
-    for(let i in query){
-      let item = query[i]
+    if (Url.includes('/v?')) {
+      query = Url.split('?')[ 1 ].split('&');
+      ;
+    } else if (Url.includes('/v#')) {
+      query = Url.split('#')[ 1 ].split(';');
+      ;
+    } else {
+      return;
+    }
+
+    for (let i in query) {
+      let item = query[ i ]
       queryitems.push(item);
-    }    
+    }
+
+    this.fillFormWithParams(queryitems);
+  }
+
+  public fillFormWithParams(queryitems: string[]): void {
 
     for(let j in queryitems){
       let item = queryitems[j].split('=')
@@ -325,13 +341,13 @@ export class FormularComponent implements OnInit {
         case 's':{
           this.ranNum.setValue(item[1]);
         }
-      } 
-    }    
+      }
+    }
   }
 
   toastTimeout(){
     this.showToast = true;
-    setTimeout(function() { 
+    setTimeout(function() {
       this.showToast = false;
   }.bind(this), 5000);
   }
