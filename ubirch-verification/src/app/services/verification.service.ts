@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {sha256} from 'js-sha256/src/sha256.js';
 import {sha512} from 'js-sha512';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import { ResponseDataService } from './response-data.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,12 +13,13 @@ export class VerificationService {
   json: string;
   hash: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private responseService: ResponseDataService) {
   }
 
   verify(fData): any {
     const json = this.createJson(fData);
     const hash = this.createHash(json);
+    this.responseService.changeHash(hash);
     console.log(json);
     console.log(hash);
     const httpOptions = {

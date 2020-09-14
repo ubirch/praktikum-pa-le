@@ -3,41 +3,38 @@ import { async, ComponentFixture, TestBed} from '@angular/core/testing';
 import { FormularComponent } from './formular.component';
 import { FormsModule, ReactiveFormsModule, NG_VALUE_ACCESSOR, CheckboxControlValueAccessor } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { VerificationService } from '../verification.service';
+import { VerificationService } from '../services/verification.service';
 import { DateTimeComponent } from './DateTime/date-time/date-time.component';
 import TestData from '../../assets/test-data.json'
 import responseData from '../../assets/response-test-data.json'
+import { ResponseDataService } from '../services/response-data.service';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('FormularComponent', () => {
   let component: FormularComponent;
   let fixture: ComponentFixture<FormularComponent>;
   let verificationService: VerificationService;
   let VerificationServiceStub: Partial<VerificationService>
+  let router: RouterTestingModule
+  let route: ActivatedRoute
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule, HttpClientModule],
+      imports: [FormsModule, ReactiveFormsModule, HttpClientModule, RouterTestingModule.withRoutes([
+        {path: 'v', component: FormularComponent},{path: '', redirectTo: 'v', pathMatch: 'full'}])],
       declarations: [ FormularComponent, DateTimeComponent ],
-      providers: [{provide: VerificationService, useValue: VerificationServiceStub}, {provide: DateTimeComponent}]
+      providers: [{provide: DateTimeComponent}, {provide: ResponseDataService}]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    VerificationServiceStub = {
-      hash: null,
-
-      verify(data){
-          if(JSON.stringify(data) === JSON.stringify(TestData)){
-            return responseData;
-          }
-      }
-
-    };
-
     fixture = TestBed.createComponent(FormularComponent);
     verificationService = TestBed.inject(VerificationService);
     component = fixture.componentInstance;
+    router = TestBed.inject(RouterTestingModule)
+    route = TestBed.inject(ActivatedRoute)
     fixture.detectChanges();
   });
 
@@ -104,7 +101,7 @@ describe('FormularComponent', () => {
 
   it('should be a valid form after test data is pasted, meaning all fields are correctly filled', ()  => {
     expect(component.form.valid).toBe(false);
-    component.fillTestData();
+    component.fillFromData(TestData);
     expect(component.form.valid).toBe(true);
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('#verifyButton').disabled).toBeFalse();
@@ -116,7 +113,7 @@ describe('FormularComponent', () => {
     expect(verifyButton.disabled).toBeTrue();
     
     //test fName
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(verifyButton.disabled).toBeFalse();
     component.fName.setValue(null);
@@ -124,7 +121,7 @@ describe('FormularComponent', () => {
     expect(verifyButton.disabled).toBeTrue();
 
     //test gName
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(verifyButton.disabled).toBeFalse();
     component.gName.setValue(null);
@@ -132,7 +129,7 @@ describe('FormularComponent', () => {
     expect(verifyButton.disabled).toBeTrue();
 
     //test idNumber
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(verifyButton.disabled).toBeFalse();
     component.idNumber.setValue(null);
@@ -140,7 +137,7 @@ describe('FormularComponent', () => {
     expect(verifyButton.disabled).toBeTrue();
 
     //test ranNum
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(verifyButton.disabled).toBeFalse();
     component.ranNum.setValue(null);
@@ -148,7 +145,7 @@ describe('FormularComponent', () => {
     expect(verifyButton.disabled).toBeTrue();
 
     // test testDateTime
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(verifyButton.disabled).toBeFalse();
     component.testDateTime.setValue(null);
@@ -156,7 +153,7 @@ describe('FormularComponent', () => {
     expect(verifyButton.disabled).toBeTrue();
 
     // test testResult
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(verifyButton.disabled).toBeFalse();
     component.testResult.setValue(null);
@@ -164,7 +161,7 @@ describe('FormularComponent', () => {
     expect(verifyButton.disabled).toBeTrue();
 
     // test testType
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(verifyButton.disabled).toBeFalse();
     component.testType.setValue(null);
@@ -172,7 +169,7 @@ describe('FormularComponent', () => {
     expect(verifyButton.disabled).toBeTrue();
 
     // test birthDate
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(verifyButton.disabled).toBeFalse();
     component.birthDate.setValue(null);
@@ -180,7 +177,7 @@ describe('FormularComponent', () => {
     expect(verifyButton.disabled).toBeTrue();
 
     // test labId
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(verifyButton.disabled).toBeFalse();
     component.labId.setValue(null);
@@ -190,7 +187,7 @@ describe('FormularComponent', () => {
 
   it('should disable the verify Button if first Name is not a string or longer than 50 characters', () => {
     const verifyButton = fixture.nativeElement.querySelector('#verifyButton');
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(component.fName.valid).toBeTrue();
     expect(component.form.valid).toBeTrue();
@@ -211,7 +208,7 @@ describe('FormularComponent', () => {
 
   it('should disable the verify Button if given Name is not a string or longer than 50 characters', () => {
     const verifyButton = fixture.nativeElement.querySelector('#verifyButton');
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(component.gName.valid).toBeTrue();
     expect(component.form.valid).toBeTrue();
@@ -232,7 +229,7 @@ describe('FormularComponent', () => {
 
   it('should disable the verify Button if birthdate is not in the correct date format', () => {
     const verifyButton = fixture.nativeElement.querySelector('#verifyButton');
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(component.birthDate.valid).toBeTrue();
     expect(component.form.valid).toBeTrue();
@@ -259,7 +256,7 @@ describe('FormularComponent', () => {
 
   it('should disable the verify Button if Test Date Time is not in the correct Date Time format', () => {
     const verifyButton = fixture.nativeElement.querySelector('#verifyButton');
-    component.fillTestData();
+    component.fillFromData(TestData);
     fixture.detectChanges();
     expect(component.testDateTime.valid).toBeTrue();
     expect(component.form.valid).toBeTrue();
@@ -285,82 +282,18 @@ describe('FormularComponent', () => {
 
   })
 
-  it('should display the success icons if the verification was successfull', () => {
-    component.fillTestData();
-    fixture.detectChanges();
-    
-    expect(component.form.value).toEqual(TestData);
-    expect(VerificationServiceStub.verify(component.form.value)).toEqual(responseData);
-    const responseCode = component.checkResponse(VerificationServiceStub.verify(component.form.value));
-    component.handleResponse(responseCode);
-    component.showSeal(responseCode, VerificationServiceStub.hash);
-    
-    
-    fixture.detectChanges();
-
-    expect(responseCode).toEqual(3);
-    expect(component.responseInfo).toEqual({
-      type: 'success',
-      header: 'Verifikation erfolgreich',
-      info: 'Die Verifikation Ihres Tests war erfolgreich'
-    })
-    expect(component.seal.src).toBeTruthy();
-    expect(fixture.nativeElement.querySelector('#UbirchSeal')).toBeTruthy();
-    expect(fixture.nativeElement.querySelector('#UbirchSeal').src).toContain("ubirch_verify_right.png")
-    
-    })
-
-  it('should display the fail icon if verification was not successfull', () => {
-    
-    component.fillTestData();
-    component.fName.setValue('Max')
-    fixture.detectChanges();
-    
-    const responseCode = component.checkResponse(VerificationServiceStub.verify(component.form.value));
-    component.handleResponse(responseCode);
-    component.showSeal(responseCode, VerificationServiceStub.hash);
-    
-    
-    fixture.detectChanges();
-    expect(responseCode).toEqual(4);
-    expect(component.responseInfo).toEqual({
-      type: 'error',
-      header: 'Verifikation fehlgeschlagen',
-      info: 'Verification failed empty response'
-    })
-    expect(component.seal.src).toBeTruthy();
-    expect(fixture.nativeElement.querySelector('#UbirchSeal')).toBeTruthy();
-    expect(fixture.nativeElement.querySelector('#UbirchSeal').src).toContain("ubirch_verify_wrong.png")
-    
-    })
-
-  it('should properly handly errors with a 500 status', () => {
-    const error = {status: 500};
-    component.handleError(error);
-    fixture.detectChanges();
-    expect(component.responseInfo).toEqual({
-      type: 'errorT',
-      header: 'Fehler',
-      info: 'Es ist ein interner Server Fehler aufgetreten. Bitte versuchen sie es später erneut.'
-    });
-    expect(fixture.nativeElement.querySelector('#toast')).toBeTruthy();
-  })
-
-  it('should properly handle other unexpected errors', () => {
-    const error = {status: 400};
-
-    component.handleError(error);
-    fixture.detectChanges();
-    expect(component.responseInfo).toEqual({
-      type: 'errorT',
-      header: 'Fehler',
-      info: 'Es ist ein unerwarteter Fehler aufgetreten. Bitte versuchen sie es später erneut.'
-    });
-    expect(fixture.nativeElement.querySelector('#toast')).toBeTruthy();
-  })
-
-  it('should properly load data from a query', () => {
-    component.Url = 'http://localhost:4200/v?f=Mustermann&g=Erika&b=19640812&p=T01000322&i=3CF75K8D0L&d=202007011030&t=PCR&r=n&s=2fe00c151cb726bb9ed7'
+  /*it('should properly load data from a query', () => {
+    const spyRoute = spyOnProperty(route, "queryParams")
+    spyRoute.and.returnValue({
+    b: "19640812",
+    d: "202007011030",
+    f: "Mustermann",
+    g: "Erika",
+    i: "3CF75K8D0L",
+    p: "T01000322",
+    r: "n",
+    s: "2fe00c151cb726bb9ed7",
+    t: "PCR"})
     component.ngOnInit();
     fixture.detectChanges;
     expect(component.form.valid).toBeTrue();
@@ -373,10 +306,9 @@ describe('FormularComponent', () => {
     expect(component.testType.value).toEqual('PCR');
     expect(component.testResult.value).toEqual('n');
     expect(component.ranNum.value).toEqual('2fe00c151cb726bb9ed7');
-  })
+  })*/
 
-  it('should properly load data from a fragment', () => {
-    component.Url = 'http://localhost:4200/v#f=Mustermann;g=Erika;b=19640812;p=T01000322;i=3CF75K8D0L;d=202007011030;t=PCR;r=n;s=2fe00c151cb726bb9ed7'
+  /*it('should properly load data from a fragment', () => {
     component.ngOnInit();
     fixture.detectChanges;
     expect(component.form.valid).toBeTrue();
@@ -389,21 +321,21 @@ describe('FormularComponent', () => {
     expect(component.testType.value).toEqual('PCR');
     expect(component.testResult.value).toEqual('n');
     expect(component.ranNum.value).toEqual('2fe00c151cb726bb9ed7');
-  })
+  })*/
 
   it('should be an empty form without params', () => {
     component.ngOnInit();
     fixture.detectChanges();
     expect(component.form.valid).toEqual(false);
-    expect(component.fName.value).toEqual(null);
-    expect(component.gName.value).toEqual(null);
-    expect(component.birthDate.value).toEqual(null);
-    expect(component.idNumber.value).toEqual(null);
-    expect(component.labId.value).toEqual(null);
-    expect(component.testDateTime.value).toEqual(null);
-    expect(component.testType.value).toEqual(null);
-    expect(component.testResult.value).toEqual(null);
-    expect(component.ranNum.value).toEqual(null);
+    expect(component.fName.value).toEqual(undefined);
+    expect(component.gName.value).toEqual(undefined);
+    expect(component.birthDate.value).toEqual(undefined);
+    expect(component.idNumber.value).toEqual(undefined);
+    expect(component.labId.value).toEqual(undefined);
+    expect(component.testDateTime.value).toEqual(undefined);
+    expect(component.testType.value).toEqual(undefined);
+    expect(component.testResult.value).toEqual(undefined);
+    expect(component.ranNum.value).toEqual(undefined);
   })
   
 });

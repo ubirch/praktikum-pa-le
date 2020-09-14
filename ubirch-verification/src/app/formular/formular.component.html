@@ -1,4 +1,4 @@
-<div class="container">
+
   <h1>Ubirch Verification</h1>
   <div>
     <form [formGroup]="form">
@@ -80,42 +80,13 @@
               class="btn btn-primary"
               type="submit" id="verifyButton">verify
       </button>
-      <button (click)="fillTestData()"
+      <button (click)="fillFromData(testData)"
               class="btn btn-primary"
               type="submit"
               style="margin-left: 5px;">testData
       </button>
 
     </form>
-    
-    <hr *ngIf="responseInfo.type === 'error' || responseInfo.type === 'success'">
-
-    <div class="container" *ngIf="responseInfo.type === 'error' || responseInfo.type === 'success'">
-
-      <a  href="{{seal.href}}">
-        <img alt="UbirchSeal" height="64px" src="{{seal.src}}" width="64px" id="UbirchSeal">
-      </a>
-
-      <a *ngFor="let anchor of anchors" href="{{anchor.href}}">
-        <img alt="{{anchor.title}}" height="64px" src="{{anchor.icon}}" width="64px">
-        <p *ngIf="!anchor.icon">{{anchor.title}}</p>
-      </a>
-
-      <hr *ngIf="seal.src">
-
-      <div *ngIf="responseInfo.type === 'error' || responseInfo.type === 'success'"
-           [ngClass]="{'alert-success': responseInfo.type === 'success', 'alert-warning': responseInfo.type === 'error'}"
-           class="alert">
-        <h1>{{responseInfo.header}}</h1>
-        <p>{{responseInfo.info}}</p>
-      </div>
-    </div>
   </div>
-  <hr>
-  <div *ngIf="responseInfo.type === 'errorT' && showToast === true" id="toast" class="alert alert-warning">
-    <h4>{{responseInfo.header}}</h4>
-    <p>{{responseInfo.info}}</p>
-  </div>
-</div>
 
 

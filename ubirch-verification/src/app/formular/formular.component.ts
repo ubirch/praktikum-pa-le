@@ -1,27 +1,22 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {VerificationService} from '../verification.service';
+import {VerificationService} from '../services/verification.service';
+import {FillDataService} from '../services/fill-data.service'
 import {
   IResponseInfo,
-  IUbirchAnchorObject,
-  IUbirchAnchorProperties,
-  IUbirchblockchain,
-  IUbirchBlockchainNet,
   IUbirchResponse,
-  IUbirchSeal, IUbirchVerificationFormData
+  IUbirchSeal
 } from '../models';
 import {VerificationStates} from '../verification-states.enum';
-import BlockchainSettings from '../../assets/blockchain-settings.json';
-import VerificationConfig from '../../assets/Verification-comfig.json';
 import TestData from '../../assets/test-data.json'
 import { ActivatedRoute } from '@angular/router';
-
+import { ResponseDataService } from '../services/response-data.service';
+import { Hash } from 'crypto';
 
 @Component({
   selector: 'app-formular',
   templateUrl: './formular.component.html',
   styleUrls: ['./formular.component.css'],
-  providers: [VerificationService]
 })
 export class FormularComponent implements OnInit {
 
@@ -29,11 +24,15 @@ export class FormularComponent implements OnInit {
   responseInfo: IResponseInfo;
   seal: IUbirchSeal;
   anchors = [];
-  Url: string;
   showToast: boolean = false;
+  responseCode: number;
+  hash: string;
+  error: any;
+  testData = TestData;
+  
 
 
-  constructor(private formbuilder: FormBuilder, private verificationService: VerificationService, private route: ActivatedRoute) {
+  constructor(private formbuilder: FormBuilder, private verificationService: VerificationService, private route: ActivatedRoute, private responseService: ResponseDataService, private fillData: FillDataService ) {
   }
 
   get fName(): AbstractControl {
@@ -85,223 +84,53 @@ export class FormularComponent implements OnInit {
       s: [null, Validators.required],
       t: [null, Validators.required]
     });
-    this.responseInfo = { type: '', header: '', info: ''}
-    this.seal = {href: '', src: ''};
-    this.Url = window.location.href
-    
+
+    this.responseService.currentResponseCode.subscribe(responseCode => this.responseCode = responseCode);
+    this.responseService.currentError.subscribe(error => this.error = error);
+    this.responseService.currentHash.subscribe(hash => this.hash = hash);
+
     this.route.queryParams.subscribe(params => {
       if(params){
-        this.fillFromUrl(params);
+        this.fillFromData(params)
       }
-    });
-    
-    this.route.fragment.subscribe(params => {
-      if(params){
-        this.fillFromUrl(params);
-      }
-    })    
+    })
+    this.getFragment();
   }
 
   verifyClick(): void {
     this.anchors = [];
-    this.verificationService.verify(this.form.value).subscribe(
-      response => {
-        console.log(response)
-        const responseCode = this.checkResponse(response.body);
-        this.handleResponse(responseCode);
-        this.showSeal(responseCode, this.verificationService.hash);
-        console.log('verification finished');
-      },
-      error => {
-        console.log(error);
-        const responseCode = this.handleError(error);
-        this.showSeal(responseCode, this.verificationService.hash);
-      }
-    );
+    this.responseService.changeResponseCode(null);
+    const response = this.verificationService.verify(this.form.value)
+    this.responseService.getResponse(response);
   }
 
-  checkResponse(response: IUbirchResponse): number {
-    if (!response) {
-      // error 'Verification failed empty response'
-      return VerificationStates.Empty_Response;
-    }
-
-    const responseObj: IUbirchResponse = response;
-
-    if (!responseObj) {
-      // error 'Verification failed empty response'
-      return VerificationStates.Empty_Response;
-    }
-
-    const seal = responseObj.upp;
-
-    if (!seal || !seal.length) {
-      // error 'Verification failed missing seal in response'
-      return VerificationStates.No_seal_found;
-    }
-
-    const blockchainTX = responseObj.anchors;
-
-    if (!blockchainTX || !blockchainTX.length) {
-      // warning 'no anchors'
-      return VerificationStates.Achors_not_found;
-    }
-
-    // verification successful
-    blockchainTX.forEach((item) => {
-      if (!item || !item.properties) {
-        return;
-      } else {
-        this.showBloxTXIcon(item.properties);
-      }
+  fillFromData(data): void {
+    this.fName.setValue(data.f);
+    this.gName.setValue(data.g);
+    this.idNumber.setValue(data.p);
+    this.ranNum.setValue(data.s);
+    this.testDateTime.setValue(data.d);
+    this.testResult.setValue(data.r);
+    this.testType.setValue(data.t);
+    this.birthDate.setValue(data.b);
+    this.labId.setValue(data.i);
+  }
+  
+  getFragment() {
+    const separator =  ';';
+    const params = window.location.hash.slice(1).split(separator).map((value: string) => {
+      const data = value.split('=');
+      return {
+        key: data[0],
+        value: data[1]
+      };
     });
-    
-    console.log('verification successfull')
-    return VerificationStates.Verification_successful;
-  }
-
-  handleResponse(responseCode): void {
-    switch (responseCode) {
-      case VerificationStates.Verification_successful: {
-        this.responseInfo = {
-          type: 'success',
-          header: 'Verifikation erfolgreich',
-          info: 'Die Verifikation Ihres Tests war erfolgreich'
-        };
-        break;
-      }
-      case VerificationStates.Empty_Response: {
-        this.responseInfo = {
-          type: 'error',
-          header: 'Verifikation fehlgeschlagen',
-          info: 'Verification failed empty response'
-        };
-        break;
-      }
-      case VerificationStates.No_seal_found: {
-        this.responseInfo = {
-          type: 'error',
-          header: 'Verifikation fehlgeschlagen',
-          info: 'Verification failed, missing seal'
-        };
-        break;
-      }
-      case VerificationStates.Achors_not_found: {
-        this.responseInfo = {
-          type: 'warning',
-          header: 'Fehlende Verankerungen',
-          info: 'Es gibt keine Blockchain-Verankerungen'
-        };
-      }
-    }
-  }
-
-  handleError(error): any {
-    if (error.status === 404) {
-      this.responseInfo = {
-        type: 'error',
-        header: 'Verifikation fehlgeschlagen',
-        info: 'Es konnte kein Zertifikat gefunden werden.'
-      };
-      this.toastTimeout();
-      return VerificationStates.Zertificate_not_found;
-    } else if(error.status >= 500 && error.status < 600){
-      this.responseInfo = {
-        type: 'errorT',
-        header: 'Fehler',
-        info: 'Es ist ein interner Server Fehler aufgetreten. Bitte versuchen sie es später erneut.'
-      };
-      this.toastTimeout();
-      return VerificationStates.Internal_Error;
-    } else {
-      this.responseInfo = {
-        type: 'errorT',
-        header: 'Fehler',
-        info: 'Es ist ein unerwarteter Fehler aufgetreten. Bitte versuchen sie es später erneut.'
-      };
-      this.toastTimeout();
-      return VerificationStates.Unknown_Error;
-    }
-  }
-
-  showSeal(responseCode, hash: string): void {
-
-    if (responseCode === VerificationStates.Verification_successful) {
-      this.seal.src = VerificationConfig.assets_url_prefix + VerificationConfig.seal_icon_url;
-
-      const encodedHash: string = encodeURIComponent(hash);
-      this.seal.href = VerificationConfig.console_verify_url + encodedHash;
-    } else {
-      this.seal.src = VerificationConfig.assets_url_prefix + VerificationConfig.no_seal_icon_url;
-    }
-  }
-
-  showBloxTXIcon(bloxTX: IUbirchAnchorProperties): void {
-    if (!bloxTX) {
-      return;
-    }
-
-    const blockchain: string = bloxTX.blockchain;
-   
-    const networkType: string = bloxTX.network_type;
-    
-
-    if (!blockchain || !networkType) {
-      return;
-    }
-
-    const blox: IUbirchblockchain = BlockchainSettings[blockchain];
-   
-
-    if (!blox || !bloxTX.txid) {
-      return;
-    }
-
-    const bloxTXData: IUbirchBlockchainNet = blox.explorerUrl[networkType];
-    const anchor: IUbirchAnchorObject = {href: undefined, icon: '', target: '', title: ''};
-
-    if (bloxTXData.url) {
-      anchor.href = bloxTXData.url.toString() + bloxTX.txid;
-    }
-
-    anchor.title = bloxTX.network_info ? bloxTX.network_info : bloxTX.blockchain;
-    anchor.target = '_blanc';
-
-    if (blox.nodeIcon) {
-     
-      anchor.icon = VerificationConfig.assets_url_prefix + blox.nodeIcon.split('/')[2];
-    }
-    this.anchors.push(anchor);
-  }
-
-  fillTestData(): void {
-    this.fName.setValue(TestData.f);
-    this.gName.setValue(TestData.g);
-    this.idNumber.setValue(TestData.p);
-    this.ranNum.setValue(TestData.s);
-    this.testDateTime.setValue(TestData.d);
-    this.testResult.setValue(TestData.r);
-    this.testType.setValue(TestData.t);
-    this.birthDate.setValue(TestData.b);
-    this.labId.setValue(TestData.i);
-  }
-
-  fillFromUrl(params): void { 
-    this.fName.setValue(params.f);
-    this.gName.setValue(params.g);
-    this.idNumber.setValue(params.p);
-    this.ranNum.setValue(params.s);
-    this.testDateTime.setValue(params.d);
-    this.testResult.setValue(params.r);
-    this.testType.setValue(params.t);
-    this.birthDate.setValue(params.b);
-    this.labId.setValue(params.i);  
-  }
-
-  toastTimeout(){
-    this.showToast = true;
-    setTimeout(function() { 
-      this.showToast = false;
-  }.bind(this), 5000);
+      
+     if(params[0].key && params[0].value){
+      params.forEach(element => {
+        const idIndex = this.form.get(element.key)
+        idIndex.setValue(element.value);
+      });
+     }
   }
 }

@@ -7,13 +7,16 @@ import { FormularComponent } from './formular/formular.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from "@angular/common/http";
 import { DateTimeComponent } from './formular/DateTime/date-time/date-time.component';
+import { ResultComponent } from './result/result.component';
+import { ResponseDataService } from './services/response-data.service';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     FormularComponent,
-    DateTimeComponent
+    DateTimeComponent,
+    ResultComponent
   ],
     imports: [
         BrowserModule,
@@ -22,7 +25,7 @@ import { DateTimeComponent } from './formular/DateTime/date-time/date-time.compo
         ReactiveFormsModule,
         HttpClientModule,
     ],
-  providers: [],
+  providers: [ResponseDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

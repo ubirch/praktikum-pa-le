@@ -2,10 +2,10 @@ import { TestBed } from '@angular/core/testing';
 
 import { VerificationService } from './verification.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import testData from '../assets/test-data.json'
-import responseData from '../assets/response-test-data.json'
-import testDataWrong from '../assets/test-data-wrong.json'
-import responseDataWrong from '../assets/response-data-wrong.json'
+import testData from '../../assets/test-data.json'
+import responseData from '../../assets/response-test-data.json'
+import testDataWrong from '../../assets/test-data-wrong.json'
+import responseDataWrong from '../../assets/response-data-wrong.json'
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 describe('VerificationService', () => {
