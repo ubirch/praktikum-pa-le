@@ -5,6 +5,7 @@ import TestData from '../../assets/test-data.json'
 import responseData from '../../assets/response-test-data.json'
 import { VerificationService } from '../services/verification.service';
 import { ResponseDataService } from '../services/response-data.service';
+import { CompileShallowModuleMetadata } from '@angular/compiler';
 
 describe('ResultComponent', () => {
   let component: ResultComponent;
@@ -23,18 +24,25 @@ describe('ResultComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ResultComponent);
     component = fixture.componentInstance;
+    component.responseInfo = {
+      type: undefined,
+      header: undefined,
+      info: undefined
+    }
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    pending()
     expect(component).toBeTruthy();
   });
 
   it('should display the success icons if the verification was successfull', () => {
     //
-    pending();
-    expect(component.responseCode).toEqual(3);
+    component.responseCode = 3;
+    component.hash = '1ENYKuJyh2ab/a7ozIyEHLFdVX+ERFIKjU5GRjgTaI4=';
+    component.handleResponse(component.responseCode);
+    component.showSeal(component.responseCode, component.hash)
+    fixture.detectChanges();
     expect(component.responseInfo).toEqual({
       type: 'success',
       header: 'Verifikation erfolgreich',
@@ -48,14 +56,14 @@ describe('ResultComponent', () => {
 
   it('should display the fail icon if verification was not successfull', () => {
     
-      pending();
-      
+      component.responseCode = 0;
+      component.handleResponse(component.responseCode);
+      component.showSeal(component.responseCode, null);      
       fixture.detectChanges();
-      expect(component.responseCode).toEqual(4);
       expect(component.responseInfo).toEqual({
         type: 'error',
         header: 'Verifikation fehlgeschlagen',
-        info: 'Verification failed empty response'
+        info: 'Es konnte kein Zertifikat gefunden werden.'
       })
       expect(component.seal.src).toBeTruthy();
       expect(fixture.nativeElement.querySelector('#UbirchSeal')).toBeTruthy();
@@ -64,9 +72,11 @@ describe('ResultComponent', () => {
   })
 
   it('should properly handly errors with a 500 status', () => {
-    pending();
-    const error = {status: 500};
-    component.handleResponse(error);
+    
+    component.responseCode = 6;
+    component.hash = null;
+    component.handleResponse(component.responseCode);
+    component.showSeal(component.responseCode, component.hash)
     fixture.detectChanges();
     expect(component.responseInfo).toEqual({
       type: 'errorT',
@@ -74,13 +84,13 @@ describe('ResultComponent', () => {
       info: 'Es ist ein interner Server Fehler aufgetreten. Bitte versuchen sie es später erneut.'
     });
     expect(fixture.nativeElement.querySelector('#toast')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('#UbirchSeal')).toBeFalsy();
   })
 
   it('should properly handle other unexpected errors', () => {
-    pending();
-    const error = {status: 400};
-
-    component.handleResponse(error);
+    component.responseCode = 5
+    component.handleResponse(component.responseCode);
+    component.showSeal(component.responseCode, component.hash)
     fixture.detectChanges();
     expect(component.responseInfo).toEqual({
       type: 'errorT',
@@ -88,5 +98,6 @@ describe('ResultComponent', () => {
       info: 'Es ist ein unerwarteter Fehler aufgetreten. Bitte versuchen sie es später erneut.'
     });
     expect(fixture.nativeElement.querySelector('#toast')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('#UbirchSeal')).toBeFalsy();
   })
 });
