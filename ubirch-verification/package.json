@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +23,7 @@
     "@angular/router": "~10.0.5",
     "@popperjs/core": "^2.4.4",
     "bootstrap": "^4.5.0",
+    "cypress": "^5.1.0",
     "jquery": "^3.5.1",
     "js-sha256": "^0.9.0",
     "js-sha512": "^0.8.0",

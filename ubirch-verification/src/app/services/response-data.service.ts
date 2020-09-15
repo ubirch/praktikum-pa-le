@@ -103,6 +103,7 @@ export class ResponseDataService {
         console.log(error);
         const responseCode = this.checkError(error);
         this.changeResponseCode(responseCode);
+        console.log('verification failed')
         // const responseCode = this.handleError(error);
         //.showSeal(responseCode, this.verificationService.hash);
       }
